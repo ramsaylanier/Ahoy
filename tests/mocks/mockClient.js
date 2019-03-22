@@ -7,10 +7,7 @@ import { SchemaLink } from "apollo-link-schema"
 import { withClientState } from "apollo-link-state"
 import casual from "casual"
 
-import {
-  makeExecutableSchema,
-  addMockFunctionsToSchema
-} from "graphql-tools"
+import { makeExecutableSchema, addMockFunctionsToSchema } from "graphql-tools"
 
 casual.seed(123)
 

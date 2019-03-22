@@ -7,6 +7,11 @@
       "jsx": true
     }
   },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "env": {
     "browser": true,
     "node": true,
@@ -16,16 +21,15 @@
     "standard",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
+    "plugin:jsx-a11y/recommended",
     "prettier",
     "prettier/react",
     "prettier/standard"
   ],
-  "plugins": [
-    "unicorn",
-    "prettier",
-    "react"
-  ],
+  "plugins": ["unicorn", "prettier", "react", "react-hooks", "jsx-a11y"],
   "rules": {
-    "unicorn/filename-case": ["error", {"case": "camelCase"}]
+    "unicorn/filename-case": ["error", { "case": "camelCase" }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

@@ -47,6 +47,7 @@ module.exports = {
     }
   },
   devServer: {
+    historyApiFallback: true,
     port: appConfig.server.port,
     host: appConfig.server.host,
     progress: true,

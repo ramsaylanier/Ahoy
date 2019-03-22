@@ -2,9 +2,11 @@ import React, { createContext, useContext } from "react"
 import { useImmerReducer } from "use-immer"
 import PropTypes from "prop-types"
 import { initialNotificationState, notificationReducer } from "./notification"
+import { initialAuthState, authReducer } from "./auth"
 
 export const storeInitialState = {
-  notification: initialNotificationState
+  notification: initialNotificationState,
+  auth: initialAuthState
 }
 
 export const StoreContext = createContext(storeInitialState)
@@ -25,7 +27,8 @@ const mergeReducers = reducers => {
 
 export const StoreProvider = props => {
   const reducer = mergeReducers({
-    notification: notificationReducer
+    notification: notificationReducer,
+    auth: authReducer
   })
 
   const initialState = { ...storeInitialState, ...props.initialState }
