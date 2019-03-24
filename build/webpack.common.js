@@ -64,7 +64,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ["*", ".mjs", ".js", ".jsx"],
+    extensions: ["*", ".mjs", ".js", ".jsx", ".gql"],
     alias: {
       "@": paths.sourceFolder,
       "@config": paths.configPath,

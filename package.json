@@ -104,6 +104,7 @@
     "react-apollo-hooks": "^0.4.0",
     "react-dom": "^16.8.1",
     "react-hot-loader": "^4.6.5",
+    "react-pose": "^4.0.8",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "use-immer": "^0.1.0"

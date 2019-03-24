@@ -8,6 +8,7 @@ export default {
   },
   zIndex: {
     appHeader: 1000,
+    drawer: 1100,
     main: 1
   }
 }

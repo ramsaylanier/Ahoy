@@ -26,7 +26,7 @@ const main = theme => css`
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    if (localStorage.getItem("loggedInToAhoy")) {
+    if (localStorage.getItem("ahoyToken")) {
       auth.checkSession({}, (err, result) => {
         if (err) {
           console.log(err)

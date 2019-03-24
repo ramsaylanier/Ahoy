@@ -1,6 +1,6 @@
 /** @jsx jsx */
-import { useEffect } from "react"
 import { jsx, css } from "@emotion/core"
+import FormControl from "@/components/form/formControl"
 
 const container = css`
   display: flex;
@@ -13,32 +13,19 @@ const container = css`
   width: 100%;
 `
 
-const control = theme => css`
-  display: flex;
-  background: ${theme.colors.background.default};
-  padding: 0.5rem;
-  &:not(:last-of-type) {
-    margin-bottom: 1rem;
-  }
-`
-
 const Login = props => {
-  useEffect(() => {
-    console.log("render")
-  }, [])
-
   return (
     <div css={container}>
       <form>
-        <div css={control}>
+        <FormControl>
           <input type="text" name="user_name" id="username" />
           <label htmlFor="username">Username</label>
-        </div>
+        </FormControl>
 
-        <div css={control}>
+        <FormControl>
           <input type="password" name="password" id="password" />
           <label htmlFor="password">Password</label>
-        </div>
+        </FormControl>
 
         <input type="submit" value="login" />
       </form>

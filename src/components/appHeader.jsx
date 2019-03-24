@@ -53,8 +53,6 @@ const AppHeader = () => {
     })
   }
 
-  console.log(authState)
-
   const isAuthenticated = new Date().getTime() < authState.expiresAt
 
   return (
