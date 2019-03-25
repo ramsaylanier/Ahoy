@@ -24,7 +24,6 @@ const Callback = ({ location }) => {
     const token = qs.parse(location.hash)
 
     if (token.access_token) {
-      console.log(token)
       localStorage.setItem("ahoyToken", token.id_token)
       navigate("/dashboard")
     } else {

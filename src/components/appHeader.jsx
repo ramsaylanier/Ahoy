@@ -1,11 +1,10 @@
 /** @jsx jsx */
-import { useEffect } from "react"
 import { jsx, css } from "@emotion/core"
 import { Link } from "@reach/router"
-import { auth } from "@/state/auth"
 import { useStore } from "@/state/store"
 
 const header = theme => css`
+  grid-area: header;
   position: relative;
   top: 0;
   left: 0;
@@ -42,35 +41,20 @@ const avatar = theme => css`
 
 const AppHeader = () => {
   const authState = useStore("auth")
-
-  useEffect(() => {}, [])
-
-  const handleClick = e => {
-    e.preventDefault()
-    auth.authorize({
-      prompt: "consent",
-      scope: "openid profile"
-    })
-  }
-
   const isAuthenticated = new Date().getTime() < authState.expiresAt
 
   return (
     <header css={header}>
       <h1 css={title}>
-        <Link css={link} to="/">
+        <Link css={link} to={isAuthenticated ? "/dashboard" : "/"}>
           Ahoy
         </Link>
       </h1>
 
-      {isAuthenticated ? (
+      {isAuthenticated && (
         <Link to="/profile" css={avatar}>
           <img src={authState.userProfile.picture} alt="user avatar" />
         </Link>
-      ) : (
-        <a href="/login" onClick={handleClick} css={link}>
-          login
-        </a>
       )}
     </header>
   )

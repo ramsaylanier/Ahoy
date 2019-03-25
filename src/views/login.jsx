@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core"
-import FormControl from "@/components/form/formControl"
+import { auth } from "@/state/auth"
 
 const container = css`
   display: flex;
@@ -13,22 +13,24 @@ const container = css`
   width: 100%;
 `
 
+const link = theme => css`
+  color: ${theme.colors.secondary};
+`
+
 const Login = props => {
+  const handleClick = e => {
+    e.preventDefault()
+    auth.authorize({
+      prompt: "consent",
+      scope: "openid profile"
+    })
+  }
+
   return (
     <div css={container}>
-      <form>
-        <FormControl>
-          <input type="text" name="user_name" id="username" />
-          <label htmlFor="username">Username</label>
-        </FormControl>
-
-        <FormControl>
-          <input type="password" name="password" id="password" />
-          <label htmlFor="password">Password</label>
-        </FormControl>
-
-        <input type="submit" value="login" />
-      </form>
+      <a href="/login" onClick={handleClick} css={link}>
+        login
+      </a>
     </div>
   )
 }

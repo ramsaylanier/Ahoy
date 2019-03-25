@@ -2,8 +2,8 @@
 import { useState } from "react"
 import { jsx, css } from "@emotion/core"
 import { auth } from "@/state/auth"
-import { useDispatch, useStore } from "@/state/store"
-import { useQuery, useMutation } from "react-apollo-hooks"
+import { useDispatch } from "@/state/store"
+import { useMutation } from "react-apollo-hooks"
 import gql from "graphql-tag"
 
 import Drawer from "@/components/drawer"
@@ -19,21 +19,8 @@ const container = css`
   left: 0;
   height: 100%;
   width: 100%;
+  overflow: auto;
 `
-
-const USER_QUERY = gql`
-  query UserQuery($id: String!) {
-    user(id: $id) {
-      id
-      projects {
-        id
-        title
-        description
-      }
-    }
-  }
-`
-
 const CREATE_PROJECT = gql`
   mutation CreateProject($project: ProjectInput!) {
     createProject(project: $project) {
@@ -47,29 +34,16 @@ const CREATE_PROJECT = gql`
     }
   }
 `
-
-const Profile = props => {
+const Profile = () => {
   const dispatch = useDispatch()
-  const authState = useStore("auth")
   const [open, setOpen] = useState(false)
   const [projectTitle, setProjectTitle] = useState("")
   const [projectDescription, setProjectDescription] = useState("")
   const createProject = useMutation(CREATE_PROJECT)
 
-  const userId = authState.userProfile ? authState.userProfile.sub : null
-
-  const { loading, data, error } = useQuery(USER_QUERY, {
-    variables: { id: userId },
-    skip: !userId
-  })
-
-  if (error) throw error
-
-  console.log(data)
-
   const handleLogout = () => {
     auth.logout({
-      returnTo: "http://localhost:3000/"
+      returnTo: "http://localhost:3000/login"
     })
     dispatch({ type: "logout" })
     localStorage.removeItem("ahoyToken")
@@ -87,11 +61,7 @@ const Profile = props => {
 
   return (
     <div css={container}>
-      {loading && "Loading..."}
-      <h1>Profile</h1>
-
       <button onClick={handleLogout}>Logout</button>
-
       <button onClick={() => setOpen(!open)}>Create Project</button>
 
       <Drawer open={open}>

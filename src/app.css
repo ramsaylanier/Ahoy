@@ -1,7 +1,17 @@
-*{
+* {
   box-sizing: border-box;
 }
 
-html{
-  font-family: 'Roboto', sans-serif;
+html {
+  font-family: "Roboto", sans-serif;
+}
+
+#app {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 50px calc(100vh - 50px);
+  align-content: stretch;
+  grid-template-areas:
+    "header"
+    "main";
 }

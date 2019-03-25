@@ -1,18 +1,20 @@
 /** @jsx jsx */
 import React, { Fragment, useEffect } from "react"
 import ReactDOM from "react-dom"
-import AppHeader from "@/components/appHeader"
 import { Router } from "@reach/router"
 import { jsx, css } from "@emotion/core"
 import { useDispatch } from "@/state/store"
+import useSession from "@/hooks/useSession"
 
 import Callback from "@/views/callback"
 import Home from "@/views/home"
 import Dashboard from "@/views/dashboard"
 import Profile from "@/views/profile"
+import Project from "@/views/project"
+
+import AppHeader from "@/components/appHeader"
 
 import { hot } from "react-hot-loader/root"
-import { auth } from "./state/auth"
 
 if (process.env.NODE_ENV !== "production") {
   var axe = require("react-axe")
@@ -20,32 +22,34 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const main = theme => css`
+  grid-area: main;
+  position: relative;
+  background: #eee;
+  padding: 1rem;
+  overflow: auto;
   z-index: ${theme.zIndex.main};
 `
 
 const App = () => {
   const dispatch = useDispatch()
+  const { token } = useSession()
+
   useEffect(() => {
-    if (localStorage.getItem("ahoyToken")) {
-      auth.checkSession({}, (err, result) => {
-        if (err) {
-          console.log(err)
-        }
-        dispatch({ type: "login", payload: { token: result } })
-      })
+    if (token) {
+      dispatch({ type: "login", payload: { token } })
     }
-  }, [dispatch])
+  }, [dispatch, token])
 
   return (
     <Fragment>
       <AppHeader />
-
       <main css={main}>
         <Router>
           <Home path="/" />
           <Dashboard path="/dashboard" />
           <Profile path="/profile" />
           <Callback path="/callback" />
+          <Project path="/projects/:projectId" />
         </Router>
       </main>
     </Fragment>
