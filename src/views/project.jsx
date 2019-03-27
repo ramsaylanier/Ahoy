@@ -2,17 +2,17 @@
 import { useState } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
-import gql from "graphql-tag"
-import { useQuery, useMutation } from "react-apollo-hooks"
+import { useQuery } from "react-apollo-hooks"
 import { useStore } from "@/state/store"
 
 import IconButton from "@/components/button/iconButton"
-import InputSubmit from "@/components/form/inputSubmit"
+import InviteUserForm from "@/components/project/inviteUserForm"
+import CreateTaskForm from "@/components/task/createTaskForm"
 import Drawer from "@/components/drawer"
-import FormControl from "@/components/form/formControl"
-import TextField from "@/components/form/textField"
 
 import AddAccountIcon from "@/icons/addAccountIcon"
+
+import { PROJECT_QUERY } from "@/graphql/project"
 
 const container = css`
   position: relative;
@@ -37,64 +37,39 @@ const header = theme => css`
   padding: 1rem;
 `
 
-const form = css`
-  padding: 0.5rem;
+const body = css`
+  display: flex;
 `
 
-const PROJECT_QUERY = gql`
-  query Project($id: String!) {
-    project(id: $id) {
-      id
-      title
-      members {
-        id
-        nickname
-      }
-      owner {
-        id
-        nickname
-      }
-    }
-  }
-`
-
-const INVITE_USER = gql`
-  mutation InviteUser($email: String!, $projectId: String!) {
-    inviteUser(email: $email, projectId: $projectId) {
-      id
-      members {
-        id
-        nickname
-      }
-    }
-  }
+const column = css`
+  flex: 1;
 `
 
 const Project = ({ projectId }) => {
   const [open, setOpen] = useState(false)
-  const [email, setEmail] = useState("")
+  const [drawerType, setDrawerType] = useState("inviteUser")
   const authState = useStore("auth")
 
   // Queries
-  const {
-    data: { project = {} },
-    loading
-  } = useQuery(PROJECT_QUERY, {
+  const { data, loading } = useQuery(PROJECT_QUERY, {
     variables: { id: projectId }
   })
 
-  // Mutations
-  const inviteUser = useMutation(INVITE_USER)
-
   if (loading) return "Loading..."
 
-  const handleSubmit = async e => {
-    e.preventDefault()
-    inviteUser({ variables: { projectId, email } })
-  }
-
+  const { project } = data
   const isOwner =
     authState.userProfile && authState.userProfile.sub === project.owner.id
+  const drawerMap = {
+    inviteUser: <InviteUserForm projectId={projectId} />,
+    createTask: <CreateTaskForm projectId={projectId} />
+  }
+  const drawerComponent = drawerMap[drawerType]
+
+  const handleClick = type => {
+    setOpen(true)
+    setDrawerType(type)
+  }
 
   return (
     <div css={container}>
@@ -102,39 +77,40 @@ const Project = ({ projectId }) => {
         <h1 css={title}>{project.title}</h1>
 
         {isOwner && (
-          <IconButton onClick={() => setOpen(!open)} color="secondary">
-            <AddAccountIcon />
-          </IconButton>
+          <div>
+            <IconButton
+              onClick={() => handleClick("inviteUser")}
+              color="secondary"
+            >
+              <AddAccountIcon />
+            </IconButton>
+            <IconButton
+              onClick={() => handleClick("createTask")}
+              color="secondary"
+            >
+              <AddAccountIcon />
+            </IconButton>
+          </div>
         )}
       </div>
 
-      {project.members.map(member => {
-        return <h1 key={member.id}>{member.nickname}</h1>
-      })}
+      <div css={body}>
+        <div css={column}>
+          <h3>Members</h3>
+          {project.members.map(member => {
+            return <h1 key={member.id}>{member.nickname}</h1>
+          })}
+        </div>
+        <div css={column}>
+          <h3>Tasks</h3>
+          {project.tasks.map(task => {
+            return <h1 key={task.id}>{task.nickname}</h1>
+          })}
+        </div>
+      </div>
 
       <Drawer open={open} onClose={() => setOpen(false)} cssProps={drawer}>
-        <form onSubmit={handleSubmit} css={form}>
-          <FormControl cssProps={{ padding: 0 }}>
-            <TextField
-              id="new-user-email"
-              label="User's Email"
-              type="email"
-              val={email}
-              styles={{
-                label: {
-                  color: "white"
-                }
-              }}
-              onChange={e => setEmail(e.target.value)}
-            />
-          </FormControl>
-
-          <InputSubmit
-            value="Invite"
-            color="secondary"
-            cssProps={{ marginTop: "1rem" }}
-          />
-        </form>
+        {drawerComponent}
       </Drawer>
     </div>
   )

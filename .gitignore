@@ -5,3 +5,5 @@ config/dev.json
 config/test.json
 config/localprod.json
 node_modules
+.env
+apollo.config.js

@@ -4,11 +4,12 @@ import { jsx, css } from "@emotion/core"
 import { auth } from "@/state/auth"
 import { useDispatch } from "@/state/store"
 import { useMutation } from "react-apollo-hooks"
-import gql from "graphql-tag"
 
 import Drawer from "@/components/drawer"
 import FormControl from "@/components/form/formControl"
 import TextField from "@/components/form/textField"
+
+import { CREATE_PROJECT } from "@/graphql/project"
 
 const container = css`
   display: flex;
@@ -21,19 +22,7 @@ const container = css`
   width: 100%;
   overflow: auto;
 `
-const CREATE_PROJECT = gql`
-  mutation CreateProject($project: ProjectInput!) {
-    createProject(project: $project) {
-      id
-      title
-      description
-      owner {
-        id
-      }
-      created_at
-    }
-  }
-`
+
 const Profile = () => {
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
@@ -64,7 +53,7 @@ const Profile = () => {
       <button onClick={handleLogout}>Logout</button>
       <button onClick={() => setOpen(!open)}>Create Project</button>
 
-      <Drawer open={open}>
+      <Drawer open={open} onClose={() => setOpen(false)}>
         <form onSubmit={handleSubmit}>
           <FormControl>
             <TextField

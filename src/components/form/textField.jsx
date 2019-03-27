@@ -28,7 +28,7 @@ const TextField = ({ label, type = "text", id, onChange, styles }) => {
   return (
     <Fragment>
       {label && (
-        <label htmlFor={id} css={[labelStyle, styles.label]}>
+        <label htmlFor={id} css={[labelStyle, styles && styles.label]}>
           {label}
         </label>
       )}

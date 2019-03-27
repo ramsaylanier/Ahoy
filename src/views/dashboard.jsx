@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core"
 
-import gql from "graphql-tag"
 import { useQuery } from "react-apollo-hooks"
+import { USER_QUERY } from "@/graphql/user"
 
 import ProjectList from "@/components/project/projectList"
 
@@ -16,27 +16,18 @@ const wrapper = css`
   max-width: 600px;
 `
 
-const USER_QUERY = gql`
-  query UserQuery($id: String) {
-    user(id: $id) {
-      projects {
-        id
-        title
-        description
-      }
-    }
-  }
-`
-
 const Dashboard = props => {
   const { loading, data } = useQuery(USER_QUERY)
 
   if (loading) return "Loding..."
 
+  const { user } = data
+  console.log(user)
+
   return (
     <div css={container}>
       <div css={wrapper}>
-        {data && <ProjectList projects={data.user.projects} />}
+        {user.projects && <ProjectList projects={data.user.projects} />}
       </div>
     </div>
   )
