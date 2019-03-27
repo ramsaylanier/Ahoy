@@ -24,11 +24,11 @@ const typeMap = {
   }
 }
 
-const TextField = ({ label, type = "text", id, onChange }) => {
+const TextField = ({ label, type = "text", id, onChange, styles }) => {
   return (
     <Fragment>
       {label && (
-        <label htmlFor={id} css={labelStyle}>
+        <label htmlFor={id} css={[labelStyle, styles.label]}>
           {label}
         </label>
       )}
@@ -41,7 +41,8 @@ TextField.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   type: PropTypes.string,
-  id: PropTypes.string
+  id: PropTypes.string,
+  styles: PropTypes.object
 }
 
 export default TextField

@@ -6,12 +6,39 @@ import gql from "graphql-tag"
 import { useQuery, useMutation } from "react-apollo-hooks"
 import { useStore } from "@/state/store"
 
+import IconButton from "@/components/button/iconButton"
+import InputSubmit from "@/components/form/inputSubmit"
 import Drawer from "@/components/drawer"
 import FormControl from "@/components/form/formControl"
 import TextField from "@/components/form/textField"
 
-const projectStyles = theme => css`
+import AddAccountIcon from "@/icons/addAccountIcon"
+
+const container = css`
   position: relative;
+`
+
+const drawer = css`
+  width: 50%;
+  max-width: 300px;
+`
+
+const title = theme => css`
+  color: white;
+  margin: 0;
+  font-size: 1.2em;
+`
+
+const header = theme => css`
+  background: ${theme.colors.primary};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+`
+
+const form = css`
+  padding: 0.5rem;
 `
 
 const PROJECT_QUERY = gql`
@@ -63,40 +90,50 @@ const Project = ({ projectId }) => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    const newUser = await inviteUser({ variables: { projectId, email } })
-    console.log(newUser)
+    inviteUser({ variables: { projectId, email } })
   }
 
   const isOwner =
     authState.userProfile && authState.userProfile.sub === project.owner.id
 
-  console.log(project)
   return (
-    <div css={projectStyles}>
-      <h1>{project.title}</h1>
-      <h3>{project.owner.nickname}</h3>
+    <div css={container}>
+      <div css={header}>
+        <h1 css={title}>{project.title}</h1>
 
-      {isOwner && (
-        <button onClick={() => setOpen(!open)}>Add User To Project</button>
-      )}
+        {isOwner && (
+          <IconButton onClick={() => setOpen(!open)} color="secondary">
+            <AddAccountIcon />
+          </IconButton>
+        )}
+      </div>
 
       {project.members.map(member => {
         return <h1 key={member.id}>{member.nickname}</h1>
       })}
 
-      <Drawer open={open}>
-        <form onSubmit={handleSubmit}>
-          <FormControl>
+      <Drawer open={open} onClose={() => setOpen(false)} cssProps={drawer}>
+        <form onSubmit={handleSubmit} css={form}>
+          <FormControl cssProps={{ padding: 0 }}>
             <TextField
               id="new-user-email"
               label="User's Email"
               type="email"
               val={email}
+              styles={{
+                label: {
+                  color: "white"
+                }
+              }}
               onChange={e => setEmail(e.target.value)}
             />
           </FormControl>
 
-          <input type="submit" value="Invite" />
+          <InputSubmit
+            value="Invite"
+            color="secondary"
+            cssProps={{ marginTop: "1rem" }}
+          />
         </form>
       </Drawer>
     </div>

@@ -1,10 +1,16 @@
 /** @jsx jsx */
+import { useRef } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import posed from "react-pose"
+import useClickAway from "@/hooks/useClickAway"
+import Color from "color"
+import theme from "@/theme"
 
-const container = theme => css`
-  background: #eee;
+const container = css`
+  background: ${Color(theme.colors.primary)
+    .darken(0.3)
+    .string()};
   position: fixed;
   right: 0;
   top: 0;
@@ -26,9 +32,17 @@ const Container = posed.div({
   }
 })
 
-const Drawer = ({ open, children }) => {
+const Drawer = ({ open, children, onClose, cssProps }) => {
+  const drawerRef = useRef()
+
+  useClickAway(drawerRef, onClose, open)
+
   return (
-    <Container css={container} pose={open ? "visible" : "hidden"}>
+    <Container
+      ref={drawerRef}
+      css={[container, cssProps]}
+      pose={open ? "visible" : "hidden"}
+    >
       {children}
     </Container>
   )
@@ -36,7 +50,9 @@ const Drawer = ({ open, children }) => {
 
 Drawer.propTypes = {
   open: PropTypes.bool.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
+  cssProps: PropTypes.object
 }
 
 export default Drawer
