@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
 import { auth } from "../state/auth"
 
-const useSession = () => {
-  const [loggedIn, setLoggedIn] = useState(false)
+const useCheckSession = () => {
   const [token, setToken] = useState(null)
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     if (localStorage.getItem("ahoyToken")) {
       auth.checkSession({}, (err, result) => {
@@ -11,14 +12,16 @@ const useSession = () => {
           console.log(err)
         }
         setToken(result)
-        setLoggedIn(true)
+        setLoading(false)
       })
+    } else {
+      setLoading(false)
     }
   }, [])
   return {
-    loggedIn,
+    loading,
     token
   }
 }
 
-export default useSession
+export default useCheckSession

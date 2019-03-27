@@ -1,10 +1,8 @@
-/** @jsx jsx */
 import React, { Fragment, useEffect } from "react"
 import ReactDOM from "react-dom"
 import { Router } from "@reach/router"
-import { jsx, css } from "@emotion/core"
 import { useDispatch } from "@/state/store"
-import useSession from "@/hooks/useSession"
+import useCheckSession from "@/hooks/useCheckSession"
 
 import Home from "@/views/home"
 import Dashboard from "@/views/dashboard"
@@ -12,8 +10,9 @@ import Profile from "@/views/profile"
 import Project from "@/views/project"
 import Callback from "@/views/callback"
 import Verify from "@/views/verify"
+import Login from "@/views/login"
 
-import AppHeader from "@/components/appHeader"
+import Layout from "@/components/layout"
 
 import { hot } from "react-hot-loader/root"
 
@@ -22,18 +21,9 @@ if (process.env.NODE_ENV !== "production") {
   axe(React, ReactDOM, 1000)
 }
 
-const main = theme => css`
-  grid-area: main;
-  position: relative;
-  background: #eee;
-  padding: 1rem;
-  overflow: auto;
-  z-index: ${theme.zIndex.main};
-`
-
 const App = () => {
   const dispatch = useDispatch()
-  const { token } = useSession()
+  const { token, loading } = useCheckSession()
 
   useEffect(() => {
     if (token) {
@@ -41,19 +31,22 @@ const App = () => {
     }
   }, [dispatch, token])
 
+  if (loading) return null
+
   return (
     <Fragment>
-      <AppHeader />
-      <main css={main}>
-        <Router>
+      <Router>
+        <Layout path="/">
           <Home path="/" />
           <Dashboard path="/dashboard" />
           <Profile path="/profile" />
           <Project path="/projects/:projectId" />
           <Callback path="/callback" />
           <Verify path="/verify" />
-        </Router>
-      </main>
+        </Layout>
+
+        <Login path="/login" />
+      </Router>
     </Fragment>
   )
 }
