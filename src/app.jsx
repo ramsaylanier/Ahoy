@@ -6,11 +6,12 @@ import { jsx, css } from "@emotion/core"
 import { useDispatch } from "@/state/store"
 import useSession from "@/hooks/useSession"
 
-import Callback from "@/views/callback"
 import Home from "@/views/home"
 import Dashboard from "@/views/dashboard"
 import Profile from "@/views/profile"
 import Project from "@/views/project"
+import Callback from "@/views/callback"
+import Verify from "@/views/verify"
 
 import AppHeader from "@/components/appHeader"
 
@@ -48,8 +49,9 @@ const App = () => {
           <Home path="/" />
           <Dashboard path="/dashboard" />
           <Profile path="/profile" />
-          <Callback path="/callback" />
           <Project path="/projects/:projectId" />
+          <Callback path="/callback" />
+          <Verify path="/verify" />
         </Router>
       </main>
     </Fragment>

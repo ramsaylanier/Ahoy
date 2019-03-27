@@ -16,6 +16,9 @@ const typeMap = {
   text: function Component(props) {
     return <input type="text" css={input} {...props} />
   },
+  email: function Component(props) {
+    return <input type="email" css={input} {...props} />
+  },
   textArea: function Component(props) {
     return <textarea css={input} {...props} />
   }
