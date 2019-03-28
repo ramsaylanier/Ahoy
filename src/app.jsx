@@ -11,6 +11,7 @@ import Project from "@/views/project"
 import Callback from "@/views/callback"
 import Verify from "@/views/verify"
 import Login from "@/views/login"
+import Task from "@/views/task"
 
 import Layout from "@/components/layout"
 
@@ -40,7 +41,9 @@ const App = () => {
           <Home path="/" />
           <Dashboard path="/dashboard" />
           <Profile path="/profile" />
-          <Project path="/projects/:projectId" />
+          <Project path="/projects/:projectId">
+            <Task path="task/:taskId" />
+          </Project>
           <Callback path="/callback" />
           <Verify path="/verify" />
         </Layout>

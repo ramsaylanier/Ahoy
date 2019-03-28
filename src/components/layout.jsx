@@ -1,9 +1,16 @@
 /** @jsx jsx */
-import { Fragment } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 
 import AppHeader from "@/components/appHeader"
+
+const container = css`
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  grid-template-rows: 100vh;
+  align-content: stretch;
+  grid-template-areas: "header main";
+`
 
 const main = theme => css`
   grid-area: main;
@@ -16,10 +23,10 @@ const main = theme => css`
 
 const Layout = props => {
   return (
-    <Fragment>
+    <div css={container}>
       <AppHeader />
       <main css={main}>{props.children}</main>
-    </Fragment>
+    </div>
   )
 }
 

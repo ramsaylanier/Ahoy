@@ -7,16 +7,15 @@ import { useStore } from "@/state/store"
 
 import IconButton from "@/components/button/iconButton"
 import InviteUserForm from "@/components/project/inviteUserForm"
+import ContentWrapper from "@/components/contentWrapper"
 import CreateTaskForm from "@/components/task/createTaskForm"
 import Drawer from "@/components/drawer"
+import TaskList from "@/components/task/taskList"
 
-import AddAccountIcon from "@/icons/addAccountIcon"
+import AddIcon from "@/icons/addIcon"
 
 import { PROJECT_QUERY } from "@/graphql/project"
-
-const container = css`
-  position: relative;
-`
+import theme from "@/theme"
 
 const drawer = css`
   width: 50%;
@@ -24,28 +23,44 @@ const drawer = css`
 `
 
 const title = theme => css`
-  color: white;
+  color: ${theme.colors.primary};
   margin: 0;
-  font-size: 1.2em;
+  font-size: 2.2em;
 `
 
 const header = theme => css`
-  background: ${theme.colors.primary};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  border-bottom: 1px solid ${theme.colors.primary};
+`
+
+const flex = css`
+  display: flex;
 `
 
 const body = css`
-  display: flex;
+  ${flex}
 `
 
 const column = css`
   flex: 1;
 `
 
-const Project = ({ projectId }) => {
+const columnHeader = css`
+  ${flex}
+  align-items: center;
+`
+
+const addButton = css`
+  margin-left: 1rem;
+  background: ${theme.colors.primary};
+  path {
+    fill: white;
+  }
+`
+
+const Project = ({ projectId, children }) => {
   const [open, setOpen] = useState(false)
   const [drawerType, setDrawerType] = useState("inviteUser")
   const authState = useStore("auth")
@@ -72,52 +87,59 @@ const Project = ({ projectId }) => {
   }
 
   return (
-    <div css={container}>
+    <ContentWrapper
+      size="small"
+      cssProps={{ background: "white", padding: "1rem" }}
+    >
       <div css={header}>
         <h1 css={title}>{project.title}</h1>
-
-        {isOwner && (
-          <div>
-            <IconButton
-              onClick={() => handleClick("inviteUser")}
-              color="secondary"
-            >
-              <AddAccountIcon />
-            </IconButton>
-            <IconButton
-              onClick={() => handleClick("createTask")}
-              color="secondary"
-            >
-              <AddAccountIcon />
-            </IconButton>
-          </div>
-        )}
       </div>
 
       <div css={body}>
         <div css={column}>
-          <h3>Members</h3>
+          <div css={columnHeader}>
+            <h3>Members</h3>
+            {isOwner && (
+              <IconButton
+                cssProps={addButton}
+                onClick={() => handleClick("inviteUser")}
+              >
+                <AddIcon />
+              </IconButton>
+            )}
+          </div>
           {project.members.map(member => {
             return <h1 key={member.id}>{member.nickname}</h1>
           })}
         </div>
         <div css={column}>
-          <h3>Tasks</h3>
-          {project.tasks.map(task => {
-            return <h1 key={task.id}>{task.nickname}</h1>
-          })}
+          <div css={columnHeader}>
+            <h3>Tasks</h3>
+            {isOwner && (
+              <IconButton
+                cssProps={addButton}
+                onClick={() => handleClick("createTask")}
+              >
+                <AddIcon />
+              </IconButton>
+            )}
+          </div>
+          <TaskList tasks={project.tasks} />
         </div>
       </div>
+
+      {children}
 
       <Drawer open={open} onClose={() => setOpen(false)} cssProps={drawer}>
         {drawerComponent}
       </Drawer>
-    </div>
+    </ContentWrapper>
   )
 }
 
 Project.propTypes = {
-  projectId: PropTypes.string
+  projectId: PropTypes.string,
+  children: PropTypes.node
 }
 
 export default Project

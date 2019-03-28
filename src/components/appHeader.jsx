@@ -12,6 +12,7 @@ const header = theme => css`
   padding: 0.5rem;
   background: ${theme.colors.primary};
   display: flex;
+  flex-flow: column;
   justify-content: space-between;
   align-items: center;
   z-index: ${theme.zIndex.appHeader};

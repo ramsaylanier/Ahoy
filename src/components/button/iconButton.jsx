@@ -25,7 +25,15 @@ const secondary = css`
   ${base}
   background: ${theme.colors.secondary};
   path {
-    fill: ${theme.colors.primary}
+    fill: ${theme.colors.primary};
+  }
+`
+
+const dflt = css`
+  ${base}
+  background: ${theme.colors.background.default};
+  path {
+    fill: ${theme.colors.primary};
   }
 `
 
@@ -35,7 +43,7 @@ const colorMap = {
 }
 
 const IconButton = ({ onClick, children, color, cssProps }) => {
-  const type = colorMap[color]
+  const type = colorMap[color] || dflt
   return (
     <button onClick={onClick} css={[type, cssProps]}>
       {children}

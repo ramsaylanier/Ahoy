@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core"
+import { redirectTo } from "@reach/router"
 
 import { useQuery } from "react-apollo-hooks"
 import { USER_QUERY } from "@/graphql/user"
@@ -12,23 +13,20 @@ const container = css`
   justify-content: center;
 `
 
-const wrapper = css`
-  max-width: 600px;
-`
-
 const Dashboard = props => {
-  const { loading, data } = useQuery(USER_QUERY)
+  const { loading, data, error } = useQuery(USER_QUERY)
 
   if (loading) return "Loding..."
 
+  if (error) {
+    redirectTo("/login")
+  }
+
   const { user } = data
-  console.log(user)
 
   return (
     <div css={container}>
-      <div css={wrapper}>
-        {user.projects && <ProjectList projects={data.user.projects} />}
-      </div>
+      {user.projects && <ProjectList projects={data.user.projects} />}
     </div>
   )
 }
