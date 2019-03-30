@@ -7,6 +7,7 @@ import InputSubmit from "@/components/form/inputSubmit"
 import FormControl from "@/components/form/formControl"
 import TextField from "@/components/form/textField"
 import { CREATE_TASK } from "@/graphql/task"
+import { useDispatch } from "@/state/store"
 
 const form = css`
   padding: 0.5rem;
@@ -17,7 +18,8 @@ const formTitle = css`
   font-size: 1em;
 `
 
-const CreateTaskForm = ({ projectId }) => {
+const CreateTaskForm = ({ projectId, onClose }) => {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
 
@@ -33,7 +35,14 @@ const CreateTaskForm = ({ projectId }) => {
       projectId
     }
 
-    createTask({ variables: { task } })
+    createTask({ variables: { task } }).then(r => {
+      onClose()
+    })
+
+    dispatch({
+      type: "throwNotification",
+      payload: { message: `Task created`, type: "success" }
+    })
   }
 
   return (
@@ -78,6 +87,7 @@ const CreateTaskForm = ({ projectId }) => {
 }
 
 CreateTaskForm.propTypes = {
+  onClose: PropTypes.func.isRequired,
   projectId: PropTypes.string
 }
 

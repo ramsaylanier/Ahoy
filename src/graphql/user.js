@@ -7,6 +7,9 @@ export const USER_QUERY = gql`
         id
         title
         description
+        owner {
+          id
+        }
       }
     }
   }

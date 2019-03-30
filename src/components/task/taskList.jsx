@@ -2,6 +2,7 @@
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import theme from "@/theme"
+import Color from "color"
 
 import { Link } from "@reach/router"
 
@@ -12,7 +13,9 @@ const list = css`
 
 const listItem = css`
   padding: 0;
-  background: ${theme.colors.background.default};
+  background: ${Color(theme.colors.primary)
+    .lighten(1.3)
+    .string()};
   &:not(:last-of-type) {
     margin-bottom: 1rem;
   }

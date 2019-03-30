@@ -14,6 +14,7 @@ import Login from "@/views/login"
 import Task from "@/views/task"
 
 import Layout from "@/components/layout"
+import Notification from "@/components/notification"
 
 import { hot } from "react-hot-loader/root"
 
@@ -24,7 +25,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const App = () => {
   const dispatch = useDispatch()
-  const { token, loading } = useCheckSession()
+  const { session, token, loading } = useCheckSession()
 
   useEffect(() => {
     if (token) {
@@ -50,6 +51,8 @@ const App = () => {
 
         <Login path="/login" />
       </Router>
+
+      <Notification />
     </Fragment>
   )
 }

@@ -6,9 +6,9 @@ import theme from "@/theme"
 const base = css`
   appearance: none;
   border: 0;
-  height: 32px;
-  width: 32px;
-  padding: 6px;
+  height: 26px;
+  width: 26px;
+  padding: 2px;
   border-radius: 50%;
   svg {
     height: 100%;

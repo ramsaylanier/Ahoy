@@ -11,6 +11,7 @@ import ContentWrapper from "@/components/contentWrapper"
 import CreateTaskForm from "@/components/task/createTaskForm"
 import Drawer from "@/components/drawer"
 import TaskList from "@/components/task/taskList"
+import UserList from "@/components/user/userList"
 
 import AddIcon from "@/icons/addIcon"
 
@@ -24,7 +25,7 @@ const drawer = css`
 
 const title = theme => css`
   color: ${theme.colors.primary};
-  margin: 0;
+  margin: 1rem 0;
   font-size: 2.2em;
 `
 
@@ -40,23 +41,28 @@ const flex = css`
 `
 
 const body = css`
-  ${flex}
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1rem;
 `
 
-const column = css`
-  flex: 1;
-`
+const column = css``
 
 const columnHeader = css`
   ${flex}
   align-items: center;
+  justify-content: space-between;
+  background: ${theme.colors.primary};
+  padding: 0 0.5rem;
+  color: white;
 `
 
 const addButton = css`
-  margin-left: 1rem;
-  background: ${theme.colors.primary};
+  margin-left: 0.5rem;
+  background: white;
   path {
-    fill: white;
+    fill: ${theme.colors.primary};
   }
 `
 
@@ -79,7 +85,7 @@ const Project = ({ projectId, children }) => {
     inviteUser: <InviteUserForm projectId={projectId} />,
     createTask: <CreateTaskForm projectId={projectId} />
   }
-  const drawerComponent = drawerMap[drawerType]
+  const DrawerComponent = drawerMap[drawerType]
 
   const handleClick = type => {
     setOpen(true)
@@ -108,9 +114,10 @@ const Project = ({ projectId, children }) => {
               </IconButton>
             )}
           </div>
-          {project.members.map(member => {
-            return <h1 key={member.id}>{member.nickname}</h1>
-          })}
+          <UserList
+            users={[project.owner, ...project.members]}
+            projectOwner={project.owner}
+          />
         </div>
         <div css={column}>
           <div css={columnHeader}>
@@ -131,7 +138,7 @@ const Project = ({ projectId, children }) => {
       {children}
 
       <Drawer open={open} onClose={() => setOpen(false)} cssProps={drawer}>
-        {drawerComponent}
+        {DrawerComponent}
       </Drawer>
     </ContentWrapper>
   )

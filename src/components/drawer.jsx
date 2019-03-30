@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useRef } from "react"
+import { useRef, cloneElement } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import posed from "react-pose"
@@ -36,6 +36,7 @@ const Drawer = ({ open, children, onClose, cssProps }) => {
   const drawerRef = useRef()
 
   useClickAway(drawerRef, onClose, open)
+  const childrenWithProps = cloneElement(children, { onClose })
 
   return (
     <Container
@@ -43,7 +44,7 @@ const Drawer = ({ open, children, onClose, cssProps }) => {
       css={[container, cssProps]}
       pose={open ? "visible" : "hidden"}
     >
-      {children}
+      {childrenWithProps}
     </Container>
   )
 }

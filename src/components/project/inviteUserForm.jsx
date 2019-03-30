@@ -7,6 +7,7 @@ import InputSubmit from "@/components/form/inputSubmit"
 import FormControl from "@/components/form/formControl"
 import TextField from "@/components/form/textField"
 import { INVITE_USER } from "@/graphql/user"
+import { useDispatch } from "@/state/store"
 
 const form = css`
   padding: 0.5rem;
@@ -18,6 +19,7 @@ const formTitle = css`
 `
 
 const InviteUserForm = ({ projectId }) => {
+  const dispatch = useDispatch()
   const [email, setEmail] = useState("")
 
   // Mutations
@@ -26,6 +28,11 @@ const InviteUserForm = ({ projectId }) => {
   const handleSubmit = async e => {
     e.preventDefault()
     inviteUser({ variables: { projectId, email } })
+
+    dispatch({
+      type: "throwNotification",
+      payload: { message: `${email} has been invited`, type: "success" }
+    })
   }
 
   return (
