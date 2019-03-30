@@ -2,12 +2,15 @@
 import { useState } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
-import { useMutation } from "react-apollo-hooks"
+import { useDispatch } from "@/state/store"
+
 import InputSubmit from "@/components/form/inputSubmit"
 import FormControl from "@/components/form/formControl"
 import TextField from "@/components/form/textField"
+
+import { useMutation } from "react-apollo-hooks"
 import { CREATE_TASK } from "@/graphql/task"
-import { useDispatch } from "@/state/store"
+import { PROJECT_QUERY } from "@/graphql/project"
 
 const form = css`
   padding: 0.5rem;
@@ -35,8 +38,21 @@ const CreateTaskForm = ({ projectId, onClose }) => {
       projectId
     }
 
-    createTask({ variables: { task } }).then(r => {
-      onClose()
+    await createTask({
+      variables: { task },
+      update: (store, { data: { createTask } }) => {
+        const { project } = store.readQuery({
+          query: PROJECT_QUERY,
+          variables: { id: projectId }
+        })
+
+        project.tasks.unshift(createTask)
+        store.writeQuery({
+          query: PROJECT_QUERY,
+          variables: { id: projectId },
+          data: { project }
+        })
+      }
     })
 
     dispatch({

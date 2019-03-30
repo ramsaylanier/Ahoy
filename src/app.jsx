@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const App = () => {
   const dispatch = useDispatch()
-  const { session, token, loading } = useCheckSession()
+  const { token, loading } = useCheckSession()
 
   useEffect(() => {
     if (token) {
