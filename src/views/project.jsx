@@ -71,10 +71,11 @@ const Project = ({ projectId, children }) => {
   const [open, setOpen] = useState(false)
   const [drawerType, setDrawerType] = useState("inviteUser")
   const authState = useStore("auth")
+  const id = Number(projectId)
 
   // Queries
   const { data, loading } = useQuery(PROJECT_QUERY, {
-    variables: { id: Number(projectId) }
+    variables: { id }
   })
 
   if (loading) return "Loading..."
@@ -83,8 +84,8 @@ const Project = ({ projectId, children }) => {
   const isOwner =
     authState.userProfile && authState.userProfile.sub === project.owner.id
   const drawerMap = {
-    inviteUser: <InviteUserForm projectId={projectId} />,
-    createTask: <CreateTaskForm projectId={projectId} />
+    inviteUser: <InviteUserForm projectId={id} />,
+    createTask: <CreateTaskForm projectId={id} />
   }
   const DrawerComponent = drawerMap[drawerType]
 

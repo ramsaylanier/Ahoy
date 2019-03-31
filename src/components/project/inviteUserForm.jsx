@@ -63,7 +63,7 @@ const InviteUserForm = ({ projectId }) => {
 }
 
 InviteUserForm.propTypes = {
-  projectId: PropTypes.string
+  projectId: PropTypes.number
 }
 
 export default InviteUserForm

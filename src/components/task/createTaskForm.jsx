@@ -107,7 +107,7 @@ const CreateTaskForm = ({ projectId }) => {
 }
 
 CreateTaskForm.propTypes = {
-  projectId: PropTypes.string
+  projectId: PropTypes.number
 }
 
 export default CreateTaskForm
