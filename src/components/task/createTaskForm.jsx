@@ -12,6 +12,8 @@ import { useMutation } from "react-apollo-hooks"
 import { CREATE_TASK } from "@/graphql/task"
 import { PROJECT_QUERY } from "@/graphql/project"
 
+import sortBy from "lodash/sortBy"
+
 const form = css`
   padding: 0.5rem;
 `
@@ -21,7 +23,7 @@ const formTitle = css`
   font-size: 1em;
 `
 
-const CreateTaskForm = ({ projectId, onClose }) => {
+const CreateTaskForm = ({ projectId }) => {
   const dispatch = useDispatch()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -46,7 +48,9 @@ const CreateTaskForm = ({ projectId, onClose }) => {
           variables: { id: projectId }
         })
 
-        project.tasks.unshift(createTask)
+        project.tasks.push(createTask)
+        project.tasks = sortBy(project.tasks, task => task.order)
+
         store.writeQuery({
           query: PROJECT_QUERY,
           variables: { id: projectId },
@@ -103,7 +107,6 @@ const CreateTaskForm = ({ projectId, onClose }) => {
 }
 
 CreateTaskForm.propTypes = {
-  onClose: PropTypes.func.isRequired,
   projectId: PropTypes.string
 }
 

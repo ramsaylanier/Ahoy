@@ -1,13 +1,14 @@
 import gql from "graphql-tag"
 
 export const PROJECT_QUERY = gql`
-  query Project($id: String!) {
+  query Project($id: Int!) {
     project(id: $id) {
       id
       title
       tasks {
         id
         title
+        order
       }
       members {
         id

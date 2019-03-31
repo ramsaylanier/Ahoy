@@ -17,6 +17,7 @@ import AddIcon from "@/icons/addIcon"
 
 import { PROJECT_QUERY } from "@/graphql/project"
 import theme from "@/theme"
+import DragDropContext from "@/components/dragDropContext"
 
 const drawer = css`
   width: 50%;
@@ -73,7 +74,7 @@ const Project = ({ projectId, children }) => {
 
   // Queries
   const { data, loading } = useQuery(PROJECT_QUERY, {
-    variables: { id: projectId }
+    variables: { id: Number(projectId) }
   })
 
   if (loading) return "Loading..."
@@ -131,6 +132,7 @@ const Project = ({ projectId, children }) => {
               </IconButton>
             )}
           </div>
+
           <TaskList tasks={project.tasks} />
         </div>
       </div>
@@ -149,4 +151,4 @@ Project.propTypes = {
   children: PropTypes.node
 }
 
-export default Project
+export default DragDropContext(Project)

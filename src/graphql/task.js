@@ -6,16 +6,24 @@ export const CREATE_TASK = gql`
       id
       title
       description
+      order
     }
   }
 `
 
+export const UPDATE_TASK_ORDER = gql`
+  mutation UpdateTaskOrder($id: Int!, $order: Int!) {
+    updateTaskOrder(id: $id, order: $order)
+  }
+`
+
 export const GET_TASK = gql`
-  query GetTask($id: String!) {
+  query GetTask($id: Int!) {
     task(id: $id) {
       id
       title
       description
+      order
     }
   }
 `
