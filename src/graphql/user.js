@@ -16,7 +16,7 @@ export const USER_QUERY = gql`
 `
 
 export const INVITE_USER = gql`
-  mutation InviteUser($email: String!, $projectId: String!) {
+  mutation InviteUser($email: String!, $projectId: Int!) {
     inviteUser(email: $email, projectId: $projectId) {
       id
       members {
