@@ -36,6 +36,7 @@ const Profile = () => {
     })
     dispatch({ type: "logout" })
     localStorage.removeItem("ahoyToken")
+    localStorage.removeItem("ahoyAccessToken")
   }
 
   const handleSubmit = e => {
