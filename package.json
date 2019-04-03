@@ -97,7 +97,7 @@
     "graphql-tools": "^4.0.4",
     "history": "^4.7.2",
     "identity-obj-proxy": "^3.0.0",
-    "immer": "^1.12.1",
+    "immer": "^2.1.4",
     "normalize.css": "^8.0.0",
     "query-string": "^6.4.0",
     "react": "^16.8.4",

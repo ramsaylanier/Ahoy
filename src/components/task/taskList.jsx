@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 
@@ -10,8 +10,12 @@ const list = css`
   padding: 0;
 `
 
-const TaskList = ({ tasks }) => {
+const TaskList = ({ tasks, actions, state, dispatch }) => {
   const [sortedTasks, setSortedTasks] = useState(tasks)
+
+  useEffect(() => {
+    setSortedTasks(tasks)
+  }, [tasks])
 
   const moveTask = (dragIndex, hoverIndex) => {
     const tasks = [...sortedTasks]
@@ -34,6 +38,9 @@ const TaskList = ({ tasks }) => {
             task={task}
             moveTask={moveTask}
             index={index}
+            actions={actions}
+            state={state}
+            dispatch={dispatch}
           />
         )
       })}
@@ -42,7 +49,10 @@ const TaskList = ({ tasks }) => {
 }
 
 TaskList.propTypes = {
-  tasks: PropTypes.array.isRequired
+  tasks: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired,
+  state: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 export default TaskList

@@ -30,7 +30,7 @@ const Task = ({ projectId, taskId }) => {
     data: { task = {} },
     error
   } = useQuery(GET_TASK, {
-    variables: { id: taskId }
+    variables: { id: Number(taskId) }
   })
 
   if (error) {

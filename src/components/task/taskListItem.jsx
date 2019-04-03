@@ -10,7 +10,9 @@ import { UPDATE_TASK_ORDER } from "@/graphql/task"
 import { Link } from "@reach/router"
 
 const listItem = css`
-  padding: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
   background: ${Color(theme.colors.primary)
     .lighten(1.3)
     .string()};
@@ -26,7 +28,10 @@ const listItem = css`
 `
 
 const TaskListItem = React.forwardRef(
-  ({ task, index, connectDragSource, connectDropTarget }, ref) => {
+  (
+    { task, index, connectDragSource, connectDropTarget, actions, state },
+    ref
+  ) => {
     const elementRef = useRef(null)
     connectDragSource(elementRef)
     connectDropTarget(elementRef)
@@ -46,6 +51,14 @@ const TaskListItem = React.forwardRef(
 
     return (
       <li ref={elementRef} css={listItem}>
+        <input
+          type="checkbox"
+          onChange={e => {
+            e.target.checked
+              ? actions.selectTask(task.id)
+              : actions.deselectTask(task.id)
+          }}
+        />
         <Link to={`task/${task.id}`}>{task.title}</Link>
       </li>
     )

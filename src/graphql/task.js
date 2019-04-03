@@ -11,6 +11,12 @@ export const CREATE_TASK = gql`
   }
 `
 
+export const DELETE_TASKS = gql`
+  mutation CreateTask($ids: [Int]!) {
+    deleteTasks(ids: $ids)
+  }
+`
+
 export const UPDATE_TASK_ORDER = gql`
   mutation UpdateTaskOrder($id: Int!, $order: Int!) {
     updateTaskOrder(id: $id, order: $order)
