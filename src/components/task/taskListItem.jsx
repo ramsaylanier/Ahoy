@@ -31,22 +31,26 @@ const listItem = css`
 const TaskListItem = React.forwardRef(
   ({ task, index, connectDragSource, connectDropTarget, actions }, ref) => {
     const elementRef = useRef(null)
-    connectDragSource(elementRef)
-    connectDropTarget(elementRef)
+    const isOwner = useIsOwner(task.project)
+    const updateTaskOrder = useMutation(UPDATE_TASK_ORDER)
+
     useImperativeHandle(ref, () => ({
       getNode: () => elementRef.current
     }))
-    const updateTaskOrder = useMutation(UPDATE_TASK_ORDER)
 
     // when item is dragged, its index will change. This will
     // update the task's order server-side so it matches client.
     useEffect(() => {
-      if (index !== task.order) {
+      if (isOwner && index !== task.order) {
         updateTaskOrder({ variables: { id: task.id, order: index } })
       }
-    }, [index, task.id, task.order, task.title, updateTaskOrder])
+    }, [index, isOwner, task.id, task.order, task.title, updateTaskOrder])
 
-    const isOwner = useIsOwner(task.project)
+    // enables drag and drop
+    if (isOwner) {
+      connectDragSource(elementRef)
+      connectDropTarget(elementRef)
+    }
 
     return (
       <li ref={elementRef} css={listItem}>
