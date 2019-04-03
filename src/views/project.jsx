@@ -2,8 +2,8 @@
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import { useQuery, useMutation } from "react-apollo-hooks"
-import { useStore } from "@/state/store"
 import { useImmerReducer } from "use-immer"
+import useIsOwner from "@/hooks/useIsOwner"
 
 import IconButton from "@/components/button/iconButton"
 import InviteUserForm from "@/components/project/inviteUserForm"
@@ -106,22 +106,20 @@ const Project = ({ projectId, children }) => {
     deselectTask: id => dispatch({ type: "deselectTask", payload: { id } }),
     clearSelection: () => dispatch({ type: "clearSelection" })
   }
-  const authState = useStore("auth")
 
   // Queries
   const id = Number(projectId)
-  const { data, loading } = useQuery(PROJECT_QUERY, {
+  const { data = {}, loading } = useQuery(PROJECT_QUERY, {
     variables: { id }
   })
 
   // Mutations
   const deleteTasks = useMutation(DELETE_TASKS)
+  const isOwner = useIsOwner(data.project)
 
   if (loading) return "Loading..."
 
   const { project } = data
-  const isOwner =
-    authState.userProfile && authState.userProfile.sub === project.owner.id
   const drawerMap = {
     inviteUser: <InviteUserForm projectId={id} />,
     createTask: <CreateTaskForm projectId={id} />

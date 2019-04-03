@@ -9,6 +9,11 @@ export const PROJECT_QUERY = gql`
         id
         title
         order
+        project {
+          owner {
+            id
+          }
+        }
       }
       members {
         id

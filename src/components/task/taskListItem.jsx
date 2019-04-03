@@ -6,6 +6,7 @@ import theme from "@/theme"
 import Color from "color"
 import { useMutation } from "react-apollo-hooks"
 import { UPDATE_TASK_ORDER } from "@/graphql/task"
+import useIsOwner from "@/hooks/useIsOwner"
 
 import { Link } from "@reach/router"
 
@@ -28,17 +29,13 @@ const listItem = css`
 `
 
 const TaskListItem = React.forwardRef(
-  (
-    { task, index, connectDragSource, connectDropTarget, actions, state },
-    ref
-  ) => {
+  ({ task, index, connectDragSource, connectDropTarget, actions }, ref) => {
     const elementRef = useRef(null)
     connectDragSource(elementRef)
     connectDropTarget(elementRef)
     useImperativeHandle(ref, () => ({
       getNode: () => elementRef.current
     }))
-
     const updateTaskOrder = useMutation(UPDATE_TASK_ORDER)
 
     // when item is dragged, its index will change. This will
@@ -49,16 +46,20 @@ const TaskListItem = React.forwardRef(
       }
     }, [index, task.id, task.order, task.title, updateTaskOrder])
 
+    const isOwner = useIsOwner(task.project)
+
     return (
       <li ref={elementRef} css={listItem}>
-        <input
-          type="checkbox"
-          onChange={e => {
-            e.target.checked
-              ? actions.selectTask(task.id)
-              : actions.deselectTask(task.id)
-          }}
-        />
+        {isOwner && (
+          <input
+            type="checkbox"
+            onChange={e => {
+              e.target.checked
+                ? actions.selectTask(task.id)
+                : actions.deselectTask(task.id)
+            }}
+          />
+        )}
         <Link to={`task/${task.id}`}>{task.title}</Link>
       </li>
     )
