@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
-
+import Color from "color"
 import AppHeader from "@/components/appHeader"
 
 const container = css`
@@ -15,7 +15,9 @@ const container = css`
 const main = theme => css`
   grid-area: main;
   position: relative;
-  background: #eee;
+  background: ${Color(theme.colors.primary)
+    .darken(0.7)
+    .string()};
   padding: 1rem;
   overflow: auto;
   z-index: ${theme.zIndex.main};
