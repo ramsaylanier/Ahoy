@@ -8,10 +8,8 @@ import theme from "@/theme"
 const listItem = css`
   display: flex;
   align-items: center;
-  background: white;
-  &:not(:last-of-type) {
-    margin-bottom: 1rem;
-  }
+  padding: 0.5rem;
+  border-bottom: 1px solid ${theme.colors.primary};
 `
 
 const title = css`
@@ -19,8 +17,7 @@ const title = css`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 1rem;
-  font-size: 1.3rem;
+  font-size: 1rem;
   text-decoration: none;
   color: ${theme.colors.primary};
 `
@@ -34,24 +31,30 @@ const badge = css`
   color: ${theme.colors.primary};
 `
 
-const ProjectListItem = ({ project }) => {
+const ProjectListItem = ({ project, expanded }) => {
   const {
     userProfile: { sub: userId }
   } = useStore("auth")
 
   const isOwner = project.owner.id === userId
+  const titleText = expanded
+    ? project.title
+    : project.title.substr(0, 1).toUpperCase()
+  const ownerText = expanded ? "owner" : "O"
+
   return (
     <div css={listItem}>
       <Link to={`/projects/${project.id}`} css={title}>
-        {project.title}
-        {isOwner && <span css={badge}>owner</span>}
+        {titleText}
+        {isOwner && <span css={badge}>{ownerText}</span>}
       </Link>
     </div>
   )
 }
 
 ProjectListItem.propTypes = {
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  expanded: PropTypes.bool.isRequired
 }
 
 export default ProjectListItem

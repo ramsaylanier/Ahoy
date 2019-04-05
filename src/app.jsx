@@ -5,7 +5,6 @@ import { useDispatch } from "@/state/store"
 import useCheckSession from "@/hooks/useCheckSession"
 
 import Home from "@/views/home"
-import Dashboard from "@/views/dashboard"
 import Profile from "@/views/profile"
 import Project from "@/views/project"
 import Callback from "@/views/callback"
@@ -40,7 +39,6 @@ const App = () => {
       <Router>
         <Layout path="/">
           <Home path="/" />
-          <Dashboard path="/dashboard" />
           <Profile path="/profile" />
           <Project path="/projects/:projectId">
             <Task path="task/:taskId" />

@@ -47,7 +47,7 @@ const AppHeader = () => {
   return (
     <header css={header}>
       <h1 css={title}>
-        <Link css={link} to={isAuthenticated ? "/dashboard" : "/"}>
+        <Link css={link} to={isAuthenticated ? "/" : "/"}>
           Ahoy
         </Link>
       </h1>
