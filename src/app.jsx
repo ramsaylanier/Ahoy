@@ -43,10 +43,10 @@ const App = () => {
           <Project path="/projects/:projectId">
             <Task path="task/:taskId" />
           </Project>
-          <Callback path="/callback" />
           <Verify path="/verify" />
         </Layout>
 
+        <Callback path="/callback" />
         <Login path="/login" />
       </Router>
 

@@ -1,25 +1,23 @@
 /** @jsx jsx */
-import { useEffect } from "react"
 import { jsx } from "@emotion/core"
 import PropTypes from "prop-types"
-import qs from "query-string"
 import { useDispatch } from "@/state/store"
+import qs from "query-string"
 import { navigate } from "@reach/router"
+import useCheckSession from "@/hooks/useCheckSession"
 
 const Callback = ({ location }) => {
   const dispatch = useDispatch()
+  const token = qs.parse(location.hash)
+  localStorage.setItem("ahoyToken", token.id_token)
+  const { token: session, loading } = useCheckSession()
 
-  useEffect(() => {
-    const token = qs.parse(location.hash)
+  if (loading) return null
 
-    if (token.access_token) {
-      localStorage.setItem("ahoyToken", token.id_token)
-      navigate("/dashboard")
-    } else {
-      navigate("/")
-    }
-  }, [dispatch, location])
-
+  if (session) {
+    dispatch({ type: "login", payload: { token: session } })
+    navigate("/")
+  }
   return <div />
 }
 
