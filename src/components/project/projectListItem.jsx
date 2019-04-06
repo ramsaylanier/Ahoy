@@ -1,26 +1,55 @@
 /** @jsx jsx */
+import { useState } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import { Link } from "@reach/router"
 import { useStore } from "@/state/store"
-import theme from "@/theme"
+import theme, { lighten, darkBlue } from "@/theme"
 
 const listItem = css`
   display: flex;
   align-items: center;
-  padding: 0.5rem;
-  border-bottom: 1px solid ${theme.colors.primary};
+  width: 100%;
 `
 
-const title = css`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+const link = css`
   width: 100%;
+  display: block;
+  padding: 1rem 0.5rem;
   font-size: 1rem;
   text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   color: ${theme.colors.primary};
+  &:hover {
+    background: ${lighten(theme.colors.primary)(1.3)};
+  }
 `
+
+const listItemExpanded = css`
+  height: auto;
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+`
+
+const listItemActive = css`
+  a {
+    background: ${theme.colors.primary};
+    color: white;
+
+    &:hover {
+      background: ${theme.colors.primary};
+    }
+  }
+`
+
+const text = css``
 
 const badge = css`
   margin-left: 1rem;
@@ -35,17 +64,25 @@ const ProjectListItem = ({ project, expanded }) => {
   const {
     userProfile: { sub: userId }
   } = useStore("auth")
+  const [isCurrent, setIsCurrent] = useState(false)
 
   const isOwner = project.owner.id === userId
-  const titleText = expanded
-    ? project.title
-    : project.title.substr(0, 1).toUpperCase()
   const ownerText = expanded ? "owner" : "O"
 
+  const setActive = ({ isCurrent }) => {
+    setIsCurrent(isCurrent)
+  }
+
   return (
-    <div css={listItem}>
-      <Link to={`/projects/${project.id}`} css={title}>
-        {titleText}
+    <div
+      css={[
+        listItem,
+        expanded && listItemExpanded,
+        isCurrent && listItemActive
+      ]}
+    >
+      <Link to={`/projects/${project.id}`} css={[link]} getProps={setActive}>
+        <span css={text}>{project.title}</span>
         {isOwner && <span css={badge}>{ownerText}</span>}
       </Link>
     </div>

@@ -2,8 +2,9 @@
 import { jsx, css } from "@emotion/core"
 import { Link } from "@reach/router"
 import { useStore } from "@/state/store"
+import theme, { darkBlue } from "@/theme"
 
-const header = theme => css`
+const header = css`
   grid-area: header;
   position: relative;
   top: 0;
@@ -15,18 +16,19 @@ const header = theme => css`
   flex-flow: column;
   justify-content: space-between;
   align-items: center;
+  border-right: 2px solid ${darkBlue};
   z-index: ${theme.zIndex.appHeader};
 `
 
-const title = theme => css`
+const title = css`
   font-size: 1.3rem;
 `
 
-const link = theme => css`
+const link = css`
   color: ${theme.colors.secondary};
 `
 
-const avatar = theme => css`
+const avatar = css`
   height: 35px;
   width: 35px;
   border-radius: 50%;
