@@ -4,9 +4,10 @@ import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import { Link } from "@reach/router"
 import { useStore } from "@/state/store"
-import theme, { lighten, darkBlue } from "@/theme"
+import theme, { lighten } from "@/theme"
 
 const listItem = css`
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
@@ -15,7 +16,7 @@ const listItem = css`
 const link = css`
   width: 100%;
   display: block;
-  padding: 1rem 0.5rem;
+  padding: 1.5rem 0.5rem;
   font-size: 1rem;
   text-decoration: none;
   text-overflow: ellipsis;
@@ -31,10 +32,6 @@ const listItemExpanded = css`
   height: auto;
 
   a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
   }
 `
 
@@ -52,11 +49,13 @@ const listItemActive = css`
 const text = css``
 
 const badge = css`
-  margin-left: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
   background: ${theme.colors.secondary};
   padding: 0.25rem 0.55rem;
   font-size: 0.7rem;
-  border-radius: 3px;
+  border-radius: 0px 0px 0px 3px;
   color: ${theme.colors.primary};
 `
 
@@ -83,8 +82,8 @@ const ProjectListItem = ({ project, expanded }) => {
     >
       <Link to={`/projects/${project.id}`} css={[link]} getProps={setActive}>
         <span css={text}>{project.title}</span>
-        {isOwner && <span css={badge}>{ownerText}</span>}
       </Link>
+      {isOwner && <span css={badge}>{ownerText}</span>}
     </div>
   )
 }

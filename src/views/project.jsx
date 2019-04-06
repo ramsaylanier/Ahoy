@@ -167,26 +167,28 @@ const Project = ({ projectId, children }) => {
       </div>
 
       <div css={body}>
-        <div css={column}>
-          <div css={columnHeader}>
-            <h3>Members</h3>
-            {isOwner &&
-              (hasSelection ? (
-                <div />
-              ) : (
-                <IconButton
-                  cssProps={addButton}
-                  onClick={() => handleClick("inviteUser")}
-                >
-                  <AddIcon />
-                </IconButton>
-              ))}
+        {isOwner && (
+          <div css={column}>
+            <div css={columnHeader}>
+              <h3>Members</h3>
+              {isOwner &&
+                (hasSelection ? (
+                  <div />
+                ) : (
+                  <IconButton
+                    cssProps={addButton}
+                    onClick={() => handleClick("inviteUser")}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                ))}
+            </div>
+            <UserList
+              users={[project.owner, ...project.members]}
+              projectOwner={project.owner}
+            />
           </div>
-          <UserList
-            users={[project.owner, ...project.members]}
-            projectOwner={project.owner}
-          />
-        </div>
+        )}
         <div css={column}>
           <div css={columnHeader}>
             <h3>

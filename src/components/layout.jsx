@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
+import theme from "@/theme"
 import Color from "color"
 import { redirectTo } from "@reach/router"
 
@@ -18,7 +19,7 @@ const container = css`
   grid-template-areas: "header main";
 `
 
-const main = theme => css`
+const main = css`
   grid-area: main;
   display: flex;
   position: relative;
@@ -27,6 +28,10 @@ const main = theme => css`
     .string()};
   overflow: auto;
   z-index: ${theme.zIndex.main};
+`
+
+const content = css`
+  flex: 1;
 `
 
 const Layout = props => {
@@ -45,7 +50,7 @@ const Layout = props => {
       <AppNav />
       <main css={main}>
         {user.projects && <ProjectList projects={data.user.projects} />}
-        {props.children}
+        <div css={content}>{props.children}</div>
       </main>
     </div>
   )

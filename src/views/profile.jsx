@@ -1,10 +1,11 @@
 /** @jsx jsx */
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { jsx, css } from "@emotion/core"
 import { auth } from "@/state/auth"
 import { useDispatch } from "@/state/store"
 import { useMutation } from "react-apollo-hooks"
 
+import Button from "@/components/button/button"
 import Drawer from "@/components/drawer"
 import FormControl from "@/components/form/formControl"
 import TextField from "@/components/form/textField"
@@ -13,8 +14,10 @@ import { CREATE_PROJECT } from "@/graphql/project"
 
 const container = css`
   display: flex;
+  flex-flow: column;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
   overflow: auto;
 `
 
@@ -45,9 +48,15 @@ const Profile = () => {
   }
 
   return (
-    <div css={container}>
-      <button onClick={handleLogout}>Logout</button>
-      <button onClick={() => setOpen(!open)}>Create Project</button>
+    <Fragment>
+      <div css={container}>
+        <Button color="secondary" onClick={() => setOpen(!open)}>
+          Create Project
+        </Button>
+        <Button color="secondary" type="text" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
 
       <Drawer open={open} onClose={() => setOpen(false)}>
         <form onSubmit={handleSubmit}>
@@ -73,7 +82,7 @@ const Profile = () => {
           <input type="submit" value="Create" />
         </form>
       </Drawer>
-    </div>
+    </Fragment>
   )
 }
 

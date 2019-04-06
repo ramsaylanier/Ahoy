@@ -39,11 +39,11 @@ const App = () => {
       <Router>
         <Layout path="/">
           <Home path="/" />
-          <Profile path="/profile" />
-          <Project path="/projects/:projectId">
+          <Profile path="profile" />
+          <Project path="projects/:projectId">
             <Task path="task/:taskId" />
           </Project>
-          <Verify path="/verify" />
+          <Verify path="verify" />
         </Layout>
 
         <Callback path="/callback" />

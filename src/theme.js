@@ -37,4 +37,7 @@ export const lighten = color => amount =>
     .lighten(amount)
     .string()
 
+export const lightenPrimary = lighten(theme.colors.primary)
+export const lightenSecondary = lighten(theme.colors.secondary)
+
 export default theme
