@@ -9,12 +9,16 @@ import ExpandRightIcon from "@/icons/expandRightIcon"
 import ExpandLeftIcon from "@/icons/expandLeftIcon"
 
 const PosedColumn = posed.div({
-  open: { width: 350 },
-  close: { width: 150 }
+  open: { width: ({ max }) => max },
+  close: { width: ({ min }) => min }
 })
 
-const list = css`
+const flex = css`
   display: flex;
+`
+
+const list = css`
+  ${flex}
   flex-flow: column;
   background: white;
   border-right: 2px solid ${darkBlue};
@@ -24,12 +28,12 @@ const header = css`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0.5rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
   background: ${lightenPrimary(1.3)};
 `
 
 const toggle = css`
-  display: flex;
+  ${flex}
   align-items: center;
   justify-content: space-between;
   background: transparent;
@@ -54,14 +58,14 @@ const text = css`
   margin: 0;
 `
 
-const Column = ({ children, title }) => {
+const Column = ({ max = "auto", min = 100, children, title }) => {
   const [open, setOpen] = useState(false)
   const handleExpand = () => {
     setOpen(!open)
   }
 
   return (
-    <PosedColumn css={list} pose={open ? "open" : "close"}>
+    <PosedColumn css={list} pose={open ? "open" : "close"} max={max} min={min}>
       <div css={header}>
         <button onClick={handleExpand} css={toggle}>
           {title && <h3 css={text}>{title}</h3>}
@@ -75,6 +79,8 @@ const Column = ({ children, title }) => {
 
 Column.propTypes = {
   children: PropTypes.node.isRequired,
+  max: PropTypes.oneOfType(["string", "number"]),
+  min: PropTypes.oneOfType(["string", "number"]),
   title: PropTypes.string
 }
 

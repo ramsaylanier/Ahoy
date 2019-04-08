@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import { Fragment } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import { useQuery, useMutation } from "react-apollo-hooks"
@@ -6,6 +7,7 @@ import { useImmerReducer } from "use-immer"
 import useIsOwner from "@/hooks/useIsOwner"
 
 import Column from "@/components/column"
+import ColumnToolbar from "@/components/columnToolbar"
 import IconButton from "@/components/button/iconButton"
 import InviteUserForm from "@/components/project/inviteUserForm"
 import InviteUserButton from "@/components/button/inviteUserButton"
@@ -27,25 +29,9 @@ const drawer = css`
   width: 50%;
   max-width: 300px;
 `
-
-const flex = css`
-  display: flex;
-`
-
 const body = css`
   display: grid;
   grid-template-columns: auto 1fr;
-`
-
-const column = css``
-
-const columnHeader = css`
-  ${flex}
-  align-items: center;
-  justify-content: space-between;
-  background: ${theme.colors.primary};
-  padding: 0 0.5rem;
-  color: white;
 `
 
 const addButton = css`
@@ -149,12 +135,9 @@ const Project = ({ projectId, children }) => {
       <div css={body}>
         {isOwner && (
           <Column title="Members">
-            <div css={{ textAlign: "center", padding: "1rem 0.5rem" }}>
-              <InviteUserButton
-                projectId={projectId}
-                cssProps={{ fontSize: ".8rem" }}
-              />
-            </div>
+            <ColumnToolbar>
+              <InviteUserButton projectId={id} />
+            </ColumnToolbar>
             <UserList
               users={[project.owner, ...project.members]}
               projectOwner={project.owner}
@@ -162,17 +145,21 @@ const Project = ({ projectId, children }) => {
           </Column>
         )}
 
-        <Column title="Tasks">
-          <div css={columnHeader}>
-            <h3>{hasSelection ? `${state.selection.length} selected` : ""}</h3>
-            {isOwner &&
-              (hasSelection ? (
-                <IconButton
-                  cssProps={addButton}
-                  onClick={() => handleDeleteClick()}
-                >
-                  <DeleteIcon />
-                </IconButton>
+        <Column title="Tasks" max={400}>
+          {isOwner && (
+            <ColumnToolbar>
+              {hasSelection ? (
+                <Fragment>
+                  <span css={{ fontSize: "0.8rem", color: "white" }}>
+                    {state.selection.length} selected
+                  </span>
+                  <IconButton
+                    cssProps={addButton}
+                    onClick={() => handleDeleteClick()}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Fragment>
               ) : (
                 <IconButton
                   cssProps={addButton}
@@ -180,8 +167,9 @@ const Project = ({ projectId, children }) => {
                 >
                   <AddIcon />
                 </IconButton>
-              ))}
-          </div>
+              )}
+            </ColumnToolbar>
+          )}
 
           <TaskList
             tasks={project.tasks}
@@ -190,7 +178,7 @@ const Project = ({ projectId, children }) => {
             dispatch={dispatch}
           />
         </Column>
-        <div css={column}>{children}</div>
+        {children}
       </div>
 
       <Drawer
