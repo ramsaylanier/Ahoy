@@ -8,6 +8,7 @@ import TaskListItem from "./taskListItem"
 const list = css`
   list-style: none;
   padding: 0;
+  margin: 0;
 `
 
 const TaskList = ({ tasks, actions, state, dispatch }) => {

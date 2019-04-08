@@ -43,9 +43,9 @@ const colorSchemes = {
   }
 }
 
-const Button = ({ children, color, type = "base", ...props }) => {
+const Button = ({ children, color, type = "base", cssProps, ...props }) => {
   return (
-    <button css={[types[type], colorSchemes[color][type]]} {...props}>
+    <button css={[types[type], colorSchemes[color][type], cssProps]} {...props}>
       {children}
     </button>
   )
@@ -53,6 +53,7 @@ const Button = ({ children, color, type = "base", ...props }) => {
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
+  cssProps: PropTypes.object,
   type: PropTypes.string,
   color: PropTypes.string
 }

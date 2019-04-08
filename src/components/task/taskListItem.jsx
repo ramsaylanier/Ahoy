@@ -17,10 +17,6 @@ const listItem = css`
   background: ${Color(theme.colors.primary)
     .lighten(1.3)
     .string()};
-  &:not(:last-of-type) {
-    margin-bottom: 1rem;
-  }
-
   a {
     display: block;
     color: ${theme.colors.primary};

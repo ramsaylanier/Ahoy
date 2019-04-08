@@ -5,8 +5,10 @@ import { useQuery, useMutation } from "react-apollo-hooks"
 import { useImmerReducer } from "use-immer"
 import useIsOwner from "@/hooks/useIsOwner"
 
+import Column from "@/components/column"
 import IconButton from "@/components/button/iconButton"
 import InviteUserForm from "@/components/project/inviteUserForm"
+import InviteUserButton from "@/components/button/inviteUserButton"
 import ContentWrapper from "@/components/contentWrapper"
 import CreateTaskForm from "@/components/task/createTaskForm"
 import Drawer from "@/components/drawer"
@@ -26,28 +28,13 @@ const drawer = css`
   max-width: 300px;
 `
 
-const title = theme => css`
-  color: ${theme.colors.primary};
-  margin: 1rem 0;
-  font-size: 2.2em;
-`
-
-const header = theme => css`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid ${theme.colors.primary};
-`
-
 const flex = css`
   display: flex;
 `
 
 const body = css`
-  margin-top: 1rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 1rem;
+  grid-template-columns: auto 1fr;
 `
 
 const column = css``
@@ -158,42 +145,26 @@ const Project = ({ projectId, children }) => {
   const hasSelection = state.selection.length > 0
 
   return (
-    <ContentWrapper
-      size="small"
-      cssProps={{ background: "white", padding: "1rem" }}
-    >
-      <div css={header}>
-        <h1 css={title}>{project.title}</h1>
-      </div>
-
+    <ContentWrapper size="full" cssProps={{ background: "white" }}>
       <div css={body}>
         {isOwner && (
-          <div css={column}>
-            <div css={columnHeader}>
-              <h3>Members</h3>
-              {isOwner &&
-                (hasSelection ? (
-                  <div />
-                ) : (
-                  <IconButton
-                    cssProps={addButton}
-                    onClick={() => handleClick("inviteUser")}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                ))}
+          <Column title="Members">
+            <div css={{ textAlign: "center", padding: "1rem 0.5rem" }}>
+              <InviteUserButton
+                projectId={projectId}
+                cssProps={{ fontSize: ".8rem" }}
+              />
             </div>
             <UserList
               users={[project.owner, ...project.members]}
               projectOwner={project.owner}
             />
-          </div>
+          </Column>
         )}
-        <div css={column}>
+
+        <Column title="Tasks">
           <div css={columnHeader}>
-            <h3>
-              {hasSelection ? `${state.selection.length} selected` : "Tasks"}
-            </h3>
+            <h3>{hasSelection ? `${state.selection.length} selected` : ""}</h3>
             {isOwner &&
               (hasSelection ? (
                 <IconButton
@@ -218,10 +189,9 @@ const Project = ({ projectId, children }) => {
             state={state}
             dispatch={dispatch}
           />
-        </div>
+        </Column>
+        <div css={column}>{children}</div>
       </div>
-
-      {children}
 
       <Drawer
         open={state.drawer.open}

@@ -3,9 +3,6 @@ import { Fragment } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 
-import { Link } from "@reach/router"
-import Modal from "@/components/modal"
-
 import { useQuery } from "react-apollo-hooks"
 import { GET_TASK } from "@/graphql/task"
 
@@ -38,21 +35,18 @@ const Task = ({ projectId, taskId }) => {
   }
 
   return (
-    <Modal open={taskId}>
-      <div css={container}>
-        <div css={content}>
-          {loading ? (
-            "Loading"
-          ) : (
-            <Fragment>
-              <Link to={`/projects/${projectId}`}>Close</Link>
-              <h1>{task.title}</h1>
-              <p>{task.description}</p>
-            </Fragment>
-          )}
-        </div>
+    <div css={container}>
+      <div css={content}>
+        {loading ? (
+          "Loading"
+        ) : (
+          <Fragment>
+            <h1>{task.title}</h1>
+            <p>{task.description}</p>
+          </Fragment>
+        )}
       </div>
-    </Modal>
+    </div>
   )
 }
 
