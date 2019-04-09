@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState } from "react"
+import { Children, cloneElement, useState } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import posed from "react-pose"
@@ -64,6 +64,10 @@ const Column = ({ max = "auto", min = 100, children, title }) => {
     setOpen(!open)
   }
 
+  const childrenWithProps = Children.map(children, child => {
+    return cloneElement(child, { expanded: open })
+  })
+
   return (
     <PosedColumn css={list} pose={open ? "open" : "close"} max={max} min={min}>
       <div css={header}>
@@ -72,7 +76,7 @@ const Column = ({ max = "auto", min = 100, children, title }) => {
           {open ? <ExpandLeftIcon /> : <ExpandRightIcon />}
         </button>
       </div>
-      {children}
+      {childrenWithProps}
     </PosedColumn>
   )
 }

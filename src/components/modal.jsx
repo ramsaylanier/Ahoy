@@ -6,8 +6,12 @@ import posed from "react-pose"
 import useClickAway from "@/hooks/useClickAway"
 import Color from "color"
 import theme from "@/theme"
+// import usePortal from "@/hooks/usePortal"
 
 const container = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: ${Color(theme.colors.primary)
     .darken(0.3)
     .fade(0.05)
@@ -18,34 +22,47 @@ const container = css`
   top: 0;
   height: 100%;
   width: 100%;
+  opacity: 0;
   z-index: ${theme.zIndex.modal};
 `
 
 const Container = posed.div({
   hidden: {
-    x: window.innerWidth
+    opacity: 0,
+    y: window.innerHeight,
+    transition: {
+      opacity: { duration: 150 },
+      y: { duration: 0, delay: 300 }
+    }
   },
   visible: {
-    x: 0,
+    opacity: 1,
+    y: 0,
     transition: {
-      type: "tween",
-      duration: 300
+      opacity: { duration: 150 },
+      y: { duration: 0 }
     }
   }
 })
 
-const Modal = ({ open, children, onClose, cssProps }) => {
-  const drawerRef = useRef()
+const inner = css`
+  display: flex;
+  justifty-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: ${theme.colors.primary};
+`
 
-  useClickAway(drawerRef, onClose, open)
+const Modal = ({ open, children, onClose, cssProps }) => {
+  const innerRef = useRef()
+  // const { Portal } = usePortal()
+  useClickAway(innerRef, onClose, open)
 
   return (
-    <Container
-      ref={drawerRef}
-      css={[container, cssProps]}
-      pose={open ? "visible" : "hidden"}
-    >
-      {children}
+    <Container css={[container, cssProps]} pose={open ? "visible" : "hidden"}>
+      <div ref={innerRef} css={inner}>
+        {children}
+      </div>
     </Container>
   )
 }

@@ -7,7 +7,7 @@ import theme from "@/theme"
 
 import IconButton from "@/components/button/iconButton"
 import AddIcon from "@/icons/addIcon"
-import InviteUserForm from "@/components/project/inviteUserForm"
+import CreateProjectForm from "@/components/project/createProjectForm"
 import Modal from "@/components/modal"
 
 const addButton = css`
@@ -24,22 +24,10 @@ const reducer = (state, action) => {
   switch (action.type) {
     case "setOpen":
       state.open = action.payload.open
-      return
-    case "setDrawerType":
-      state.drawer.type = action.payload.type
-      return
-    case "selectTask":
-      state.selection.push(action.payload.id)
-      return
-    case "deselectTask":
-      state.selection = state.selection.filter(id => id !== action.payload.id)
-      return
-    case "clearSelection":
-      state.selection = []
   }
 }
 
-const InviteUserButton = ({ projectId, cssProps }) => {
+const CreateProjectButton = ({ cssProps }) => {
   const [state, dispatch] = useImmerReducer(reducer, initialState)
   const actions = {
     setOpen: isOpen => dispatch({ type: "setOpen", payload: { open: isOpen } })
@@ -53,21 +41,20 @@ const InviteUserButton = ({ projectId, cssProps }) => {
     <Fragment>
       <IconButton
         cssProps={[addButton, cssProps]}
-        onClick={() => handleClick("inviteUser")}
+        onClick={() => handleClick()}
       >
         <AddIcon />
       </IconButton>
 
       <Modal open={state.open} onClose={() => actions.setOpen(false)}>
-        <InviteUserForm projectId={projectId} />
+        <CreateProjectForm />
       </Modal>
     </Fragment>
   )
 }
 
-InviteUserButton.propTypes = {
-  projectId: PropTypes.number.isRequired,
+CreateProjectButton.propTypes = {
   cssProps: PropTypes.object
 }
 
-export default InviteUserButton
+export default CreateProjectButton

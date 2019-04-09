@@ -1,16 +1,18 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
-import theme from "@/theme"
+import { darkenPrimary } from "@/theme"
+
+const darkBlue = darkenPrimary(0.3)
 
 const toolbar = css`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  background: ${theme.colors.primary};
+  background: ${darkBlue};
   padding: 0.5rem 0;
   button {
-    background: ${theme.colors.primary};
+    background: ${darkBlue};
     path {
       fill: white;
     }

@@ -38,6 +38,7 @@ export const lighten = color => amount =>
     .string()
 
 export const lightenPrimary = lighten(theme.colors.primary)
+export const darkenPrimary = darken(theme.colors.primary)
 export const lightenSecondary = lighten(theme.colors.secondary)
 
 export default theme

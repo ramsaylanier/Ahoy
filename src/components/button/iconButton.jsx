@@ -55,7 +55,7 @@ IconButton.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func,
   color: PropTypes.string,
-  cssProps: PropTypes.object
+  cssProps: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 }
 
 export default IconButton

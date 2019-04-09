@@ -9,15 +9,12 @@ import useIsOwner from "@/hooks/useIsOwner"
 import Column from "@/components/column"
 import ColumnToolbar from "@/components/columnToolbar"
 import IconButton from "@/components/button/iconButton"
-import InviteUserForm from "@/components/project/inviteUserForm"
 import InviteUserButton from "@/components/button/inviteUserButton"
 import ContentWrapper from "@/components/contentWrapper"
-import CreateTaskForm from "@/components/task/createTaskForm"
-import Drawer from "@/components/drawer"
+import CreateTaskButton from "@/components/button/createTaskButton"
 import TaskList from "@/components/task/taskList"
 import UserList from "@/components/user/userList"
 
-import AddIcon from "@/icons/addIcon"
 import DeleteIcon from "@/icons/deleteIcon"
 
 import { PROJECT_QUERY } from "@/graphql/project"
@@ -25,13 +22,10 @@ import { DELETE_TASKS } from "@/graphql/task"
 import theme from "@/theme"
 import DragDropContext from "@/components/dragDropContext"
 
-const drawer = css`
-  width: 50%;
-  max-width: 300px;
-`
 const body = css`
   display: grid;
   grid-template-columns: auto 1fr;
+  height: 100vh;
 `
 
 const addButton = css`
@@ -93,16 +87,6 @@ const Project = ({ projectId, children }) => {
   if (loading) return "Loading..."
 
   const { project } = data
-  const drawerMap = {
-    inviteUser: <InviteUserForm projectId={id} />,
-    createTask: <CreateTaskForm projectId={id} />
-  }
-  const DrawerComponent = drawerMap[state.drawer.type]
-
-  const handleClick = type => {
-    actions.open(true)
-    actions.setDrawerType(type)
-  }
 
   const handleDeleteClick = () => {
     deleteTasks({
@@ -161,12 +145,7 @@ const Project = ({ projectId, children }) => {
                   </IconButton>
                 </Fragment>
               ) : (
-                <IconButton
-                  cssProps={addButton}
-                  onClick={() => handleClick("createTask")}
-                >
-                  <AddIcon />
-                </IconButton>
+                <CreateTaskButton projectId={id} />
               )}
             </ColumnToolbar>
           )}
@@ -180,14 +159,6 @@ const Project = ({ projectId, children }) => {
         </Column>
         {children}
       </div>
-
-      <Drawer
-        open={state.drawer.open}
-        onClose={() => actions.open(false)}
-        cssProps={drawer}
-      >
-        {DrawerComponent}
-      </Drawer>
     </ContentWrapper>
   )
 }
