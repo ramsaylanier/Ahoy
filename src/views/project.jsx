@@ -129,7 +129,7 @@ const Project = ({ projectId, children }) => {
           </Column>
         )}
 
-        <Column title="Tasks" max={400}>
+        <Column title="Tasks" expandable={false} max={400}>
           {isOwner && (
             <ColumnToolbar>
               {hasSelection ? (

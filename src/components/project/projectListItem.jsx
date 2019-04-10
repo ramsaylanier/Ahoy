@@ -4,7 +4,7 @@ import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import { Link } from "@reach/router"
 import { useStore } from "@/state/store"
-import theme, { lighten } from "@/theme"
+import theme, { lightenPrimary } from "@/theme"
 
 const listItem = css`
   position: relative;
@@ -24,7 +24,7 @@ const link = css`
   overflow: hidden;
   color: ${theme.colors.primary};
   &:hover {
-    background: ${lighten(theme.colors.primary)(1.3)};
+    background: ${lightenPrimary(1.3)};
   }
 `
 

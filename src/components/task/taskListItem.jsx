@@ -2,7 +2,7 @@
 import React, { useImperativeHandle, useRef, useEffect } from "react"
 import { DragSource, DropTarget } from "react-dnd"
 import { jsx, css } from "@emotion/core"
-import theme from "@/theme"
+import theme, { lightenPrimary } from "@/theme"
 import Color from "color"
 import { useMutation } from "react-apollo-hooks"
 import { UPDATE_TASK_ORDER } from "@/graphql/task"
@@ -13,14 +13,26 @@ import { Link } from "@reach/router"
 const listItem = css`
   display: flex;
   align-items: center;
-  padding: 0 0.5rem;
   background: ${Color(theme.colors.primary)
     .lighten(1.3)
     .string()};
   a {
+    text-overflow: ellipsis;
     display: block;
     color: ${theme.colors.primary};
     padding: 1rem;
+  }
+`
+
+const link = css`
+  width: 100%;
+  display: block;
+  padding: 1.5rem 0.5rem;
+  font-size: 1rem;
+  text-decoration: none;
+  color: ${theme.colors.primary};
+  &:hover {
+    background: ${lightenPrimary(1.3)};
   }
 `
 
@@ -49,7 +61,7 @@ const TaskListItem = React.forwardRef(
     }
 
     return (
-      <li ref={elementRef} css={listItem}>
+      <div ref={elementRef} css={listItem}>
         {isOwner && (
           <input
             type="checkbox"
@@ -60,8 +72,10 @@ const TaskListItem = React.forwardRef(
             }}
           />
         )}
-        <Link to={`task/${task.id}`}>{task.title}</Link>
-      </li>
+        <Link css={link} to={`task/${task.id}`}>
+          {task.title}
+        </Link>
+      </div>
     )
   }
 )

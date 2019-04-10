@@ -1,15 +1,9 @@
 /** @jsx jsx */
-import { useState, useEffect } from "react"
-import { jsx, css } from "@emotion/core"
+import { Fragment, useState, useEffect } from "react"
+import { jsx } from "@emotion/core"
 import PropTypes from "prop-types"
 
 import TaskListItem from "./taskListItem"
-
-const list = css`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`
 
 const TaskList = ({ tasks, actions, state, dispatch }) => {
   const [sortedTasks, setSortedTasks] = useState(tasks)
@@ -31,7 +25,7 @@ const TaskList = ({ tasks, actions, state, dispatch }) => {
   }
 
   return (
-    <ul css={list}>
+    <Fragment>
       {sortedTasks.map((task, index) => {
         return (
           <TaskListItem
@@ -45,7 +39,7 @@ const TaskList = ({ tasks, actions, state, dispatch }) => {
           />
         )
       })}
-    </ul>
+    </Fragment>
   )
 }
 

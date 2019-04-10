@@ -58,26 +58,52 @@ const text = css`
   margin: 0;
 `
 
-const Column = ({ max = "auto", min = 100, children, title }) => {
+const Column = ({
+  max = "auto",
+  min = 100,
+  children,
+  title,
+  expandable = true
+}) => {
   const [open, setOpen] = useState(false)
   const handleExpand = () => {
     setOpen(!open)
   }
 
-  const childrenWithProps = Children.map(children, child => {
-    return cloneElement(child, { expanded: open })
-  })
+  if (expandable) {
+    const childrenWithProps = Children.map(children, child => {
+      return child ? cloneElement(child, { expanded: open }) : null
+    })
+    return (
+      <PosedColumn
+        css={list}
+        pose={open ? "open" : "close"}
+        max={max}
+        min={min}
+      >
+        <div css={header}>
+          <button onClick={handleExpand} css={toggle}>
+            {title && <h3 css={text}>{title}</h3>}
+            {open ? <ExpandLeftIcon /> : <ExpandRightIcon />}
+          </button>
+        </div>
+        {childrenWithProps}
+      </PosedColumn>
+    )
+  }
 
   return (
-    <PosedColumn css={list} pose={open ? "open" : "close"} max={max} min={min}>
+    <div
+      css={[list, { maxWidth: max }]}
+      pose={open ? "open" : "close"}
+      max={max}
+      min={min}
+    >
       <div css={header}>
-        <button onClick={handleExpand} css={toggle}>
-          {title && <h3 css={text}>{title}</h3>}
-          {open ? <ExpandLeftIcon /> : <ExpandRightIcon />}
-        </button>
+        {title && <h3 css={[text, { padding: "4px 0" }]}>{title}</h3>}
       </div>
-      {childrenWithProps}
-    </PosedColumn>
+      {children}
+    </div>
   )
 }
 
@@ -85,7 +111,8 @@ Column.propTypes = {
   children: PropTypes.node.isRequired,
   max: PropTypes.oneOfType(["string", "number"]),
   min: PropTypes.oneOfType(["string", "number"]),
-  title: PropTypes.string
+  title: PropTypes.string,
+  expandable: PropTypes.boolean
 }
 
 export default Column
