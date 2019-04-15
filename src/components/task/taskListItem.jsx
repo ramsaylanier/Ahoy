@@ -64,6 +64,7 @@ const TaskListItem = React.forwardRef(
       <div ref={elementRef} css={listItem}>
         {isOwner && (
           <input
+            css={{ marginLeft: "1rem" }}
             type="checkbox"
             onChange={e => {
               e.target.checked

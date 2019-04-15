@@ -107,9 +107,11 @@
     "react-dnd-html5-backend": "^7.4.0",
     "react-dom": "^16.8.1",
     "react-hot-loader": "^4.6.5",
+    "react-mde": "^7.3.2",
     "react-pose": "^4.0.8",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "showdown": "^1.9.0",
     "use-immer": "^0.1.0"
   }
 }

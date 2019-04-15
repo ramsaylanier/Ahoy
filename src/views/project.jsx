@@ -23,8 +23,7 @@ import theme from "@/theme"
 import DragDropContext from "@/components/dragDropContext"
 
 const body = css`
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
   height: 100vh;
 `
 
@@ -150,14 +149,16 @@ const Project = ({ projectId, children }) => {
             </ColumnToolbar>
           )}
 
-          <TaskList
-            tasks={project.tasks}
-            actions={actions}
-            state={state}
-            dispatch={dispatch}
-          />
+          {project && (
+            <TaskList
+              tasks={project.tasks}
+              actions={actions}
+              state={state}
+              dispatch={dispatch}
+            />
+          )}
         </Column>
-        {children}
+        <div css={{ flex: 1 }}>{children}</div>
       </div>
     </ContentWrapper>
   )

@@ -7,6 +7,11 @@ export const CREATE_TASK = gql`
       title
       description
       order
+      project {
+        owner {
+          id
+        }
+      }
     }
   }
 `
@@ -30,6 +35,11 @@ export const GET_TASK = gql`
       title
       description
       order
+      project {
+        owner {
+          id
+        }
+      }
     }
   }
 `
