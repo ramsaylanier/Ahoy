@@ -11,13 +11,13 @@ import ReactMde from "react-mde"
 import "react-mde/lib/styles/css/react-mde-all.css"
 
 const container = css`
-  display: flex;
   height: 100vh;
   width: 100%;
   overflow: auto;
 `
 
 const content = css`
+  height: 100%;
   padding: 2rem;
   background: white;
   display: flex;
@@ -33,7 +33,7 @@ const converter = new Showdown.Converter({
 
 const Task = ({ taskId }) => {
   const [val, setVal] = useState("")
-  const [tab, setTab] = useState("write")
+  const [tab, setTab] = useState("preview")
   const [isEditing, setIsEditing] = useState(false)
   const {
     loading,
@@ -66,6 +66,11 @@ const Task = ({ taskId }) => {
                 generateMarkdownPreview={markdown =>
                   Promise.resolve(converter.makeHtml(markdown))
                 }
+                textAreaProps={{
+                  style: {
+                    height: "100%"
+                  }
+                }}
               />
             </Fragment>
           )}
