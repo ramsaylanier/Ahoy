@@ -16,6 +16,22 @@ export const CREATE_TASK = gql`
   }
 `
 
+export const UPDATE_TASK_DESCRIPTION = gql`
+  mutation UpdateTaskDescription($taskId: Int!, $description: String!) {
+    updateTaskDescription(taskId: $taskId, description: $description) {
+      id
+      title
+      description
+      order
+      project {
+        owner {
+          id
+        }
+      }
+    }
+  }
+`
+
 export const DELETE_TASKS = gql`
   mutation CreateTask($ids: [Int]!) {
     deleteTasks(ids: $ids)
