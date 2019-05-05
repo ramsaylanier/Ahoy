@@ -28,7 +28,7 @@ const header = css`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0.5rem 0 0.5rem 0.5rem;
+  padding: 0.5rem;
   background: ${lightenPrimary(1.3)};
 `
 
@@ -93,12 +93,7 @@ const Column = ({
   }
 
   return (
-    <div
-      css={[list, { maxWidth: max }]}
-      pose={open ? "open" : "close"}
-      max={max}
-      min={min}
-    >
+    <div css={[list, { maxWidth: max }]} max={max} min={min}>
       <div css={header}>
         {title && <h3 css={[text, { padding: "4px 0" }]}>{title}</h3>}
       </div>
@@ -112,7 +107,7 @@ Column.propTypes = {
   max: PropTypes.oneOfType(["string", "number"]),
   min: PropTypes.oneOfType(["string", "number"]),
   title: PropTypes.string,
-  expandable: PropTypes.boolean
+  expandable: PropTypes.bool
 }
 
 export default Column

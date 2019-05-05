@@ -8,6 +8,7 @@ import client from "@/graphql/client"
 import App from "./app.jsx"
 import theme from "./theme"
 import "normalize.css"
+import "@reach/tooltip/styles.css"
 import "./app.css"
 
 ReactDOM.render(

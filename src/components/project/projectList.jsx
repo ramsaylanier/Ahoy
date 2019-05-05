@@ -9,7 +9,7 @@ import ProjectListItem from "./projectListItem"
 
 const ProjectList = ({ projects }) => {
   return (
-    <Column title="Projects">
+    <Column title="Projects" expandable={false}>
       <ColumnToolbar>
         <CreateProjectButton />
       </ColumnToolbar>

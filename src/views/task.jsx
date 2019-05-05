@@ -103,7 +103,7 @@ const Task = ({ taskId }) => {
                   </Button>
                 )}
 
-                {!isOwner && !task.completed && (
+                {!isOwner && (
                   <Button onClick={handleCompleteTask} cssProps={button}>
                     Mark As Complete
                   </Button>

@@ -6,6 +6,8 @@ import { Link } from "@reach/router"
 import { useStore } from "@/state/store"
 import theme, { lightenPrimary } from "@/theme"
 
+import Tooltip from "@reach/tooltip"
+
 const listItem = css`
   position: relative;
   display: flex;
@@ -14,48 +16,53 @@ const listItem = css`
 `
 
 const link = css`
+  position: relative;
   width: 100%;
   display: block;
   padding: 1.5rem 0.5rem;
   font-size: 1rem;
+  text-align: center;
   text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
   color: ${theme.colors.primary};
   &:hover {
     background: ${lightenPrimary(1.3)};
   }
 `
 
+const linkActive = css`
+  position: relative;
+  background: ${theme.colors.primary};
+
+  > span {
+    background: white;
+    color: ${theme.colors.primary};
+  }
+
+  &:hover {
+    background: ${theme.colors.primary};
+  }
+`
+
 const listItemExpanded = css`
   height: auto;
-
-  a {
-  }
 `
 
-const listItemActive = css`
-  a {
-    background: ${theme.colors.primary};
-    color: white;
-
-    &:hover {
-      background: ${theme.colors.primary};
-    }
-  }
+const text = css`
+  position: relative;
+  background: ${theme.colors.primary};
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 3px;
 `
-
-const text = css``
 
 const badge = css`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -0.35rem;
+  right: -0.35rem;
   background: ${theme.colors.secondary};
-  padding: 0.25rem 0.55rem;
-  font-size: 0.7rem;
-  border-radius: 0px 0px 0px 3px;
+  height: 0.7rem;
+  width: 0.7rem;
+  border-radius: 50%;
   color: ${theme.colors.primary};
 `
 
@@ -66,24 +73,25 @@ const ProjectListItem = ({ project, expanded }) => {
   const [isCurrent, setIsCurrent] = useState(false)
 
   const isOwner = project.owner.id === userId
-  const ownerText = expanded ? "owner" : "O"
 
   const setActive = ({ isCurrent }) => {
     setIsCurrent(isCurrent)
   }
 
   return (
-    <div
-      css={[
-        listItem,
-        expanded && listItemExpanded,
-        isCurrent && listItemActive
-      ]}
-    >
-      <Link to={`/projects/${project.id}`} css={[link]} getProps={setActive}>
-        <span css={text}>{project.title}</span>
-      </Link>
-      {isOwner && <span css={badge}>{ownerText}</span>}
+    <div css={[listItem, expanded && listItemExpanded]}>
+      <Tooltip label={project.title}>
+        <Link
+          to={`/projects/${project.id}`}
+          css={[link, isCurrent && linkActive]}
+          getProps={setActive}
+        >
+          <span css={text}>
+            {project.title[0].toUpperCase()}
+            {isOwner && <span css={badge} />}
+          </span>
+        </Link>
+      </Tooltip>
     </div>
   )
 }

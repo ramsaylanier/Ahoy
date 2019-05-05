@@ -9,6 +9,8 @@ export const PROJECT_QUERY = gql`
         id
         title
         order
+        completed
+        completed_at
         project {
           owner {
             id
