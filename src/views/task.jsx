@@ -5,7 +5,12 @@ import PropTypes from "prop-types"
 import useIsOwner from "@/hooks/useIsOwner"
 
 import { useQuery, useMutation } from "react-apollo-hooks"
-import { GET_TASK, UPDATE_TASK_DESCRIPTION } from "@/graphql/task"
+import {
+  GET_TASK,
+  UPDATE_TASK_DESCRIPTION,
+  COMPLETE_TASK
+} from "@/graphql/task"
+import Button from "@/components/button/button"
 import Showdown from "showdown"
 import ReactMde from "react-mde"
 import "react-mde/lib/styles/css/react-mde-all.css"
@@ -23,6 +28,10 @@ const content = css`
   background: white;
   display: flex;
   flex-flow: column;
+`
+
+const button = css`
+  margin-left: 1rem;
 `
 
 const converter = new Showdown.Converter({
@@ -47,6 +56,7 @@ const Task = ({ taskId }) => {
 
   // MUTATION
   const updateTaskDescription = useMutation(UPDATE_TASK_DESCRIPTION)
+  const completeTask = useMutation(COMPLETE_TASK)
 
   // RESET
   useEffect(() => {
@@ -72,6 +82,10 @@ const Task = ({ taskId }) => {
     setIsEditing(!isEditing)
   }
 
+  const handleCompleteTask = () => {
+    completeTask({ variables: { taskId: Number(taskId) } })
+  }
+
   if (task) {
     return (
       <div css={container}>
@@ -80,10 +94,21 @@ const Task = ({ taskId }) => {
             "Loading"
           ) : (
             <Fragment>
-              <button onClick={handleClick}>
-                {isEditing ? "Save" : "Edit"}
-              </button>
-              <h1>{task.title}</h1>
+              <div css={{ display: "flex", alignItems: "center" }}>
+                <h1>{task.title}</h1>
+
+                {isOwner && (
+                  <Button onClick={handleClick} cssProps={button}>
+                    {isEditing ? "Save" : "Edit"}
+                  </Button>
+                )}
+
+                {!isOwner && !task.completed && (
+                  <Button onClick={handleCompleteTask} cssProps={button}>
+                    Mark As Complete
+                  </Button>
+                )}
+              </div>
 
               {isEditing ? (
                 <ReactMde
