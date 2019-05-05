@@ -7,6 +7,34 @@ export const CREATE_TASK = gql`
       title
       description
       order
+      completed
+      completed_at
+      project {
+        owner {
+          id
+        }
+      }
+    }
+  }
+`
+
+export const COMPLETE_TASK = gql`
+  mutation CompleteTask($taskId: Int!) {
+    completeTask(taskId: $taskId) {
+      id
+      completed
+      completed_at
+    }
+  }
+`
+
+export const UPDATE_TASK_DESCRIPTION = gql`
+  mutation UpdateTaskDescription($taskId: Int!, $description: String!) {
+    updateTaskDescription(taskId: $taskId, description: $description) {
+      id
+      title
+      description
+      order
       project {
         owner {
           id
@@ -35,6 +63,8 @@ export const GET_TASK = gql`
       title
       description
       order
+      completed
+      completed_at
       project {
         owner {
           id

@@ -43,7 +43,13 @@ const colorSchemes = {
   }
 }
 
-const Button = ({ children, color, type = "base", cssProps, ...props }) => {
+const Button = ({
+  children,
+  color = "primary",
+  type = "base",
+  cssProps,
+  ...props
+}) => {
   return (
     <button css={[types[type], colorSchemes[color][type], cssProps]} {...props}>
       {children}

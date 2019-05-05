@@ -1,14 +1,20 @@
 /** @jsx jsx */
-import { Fragment, useState } from "react"
+import { Fragment, useState, useEffect } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import useIsOwner from "@/hooks/useIsOwner"
 
-import { useQuery } from "react-apollo-hooks"
-import { GET_TASK } from "@/graphql/task"
+import { useQuery, useMutation } from "react-apollo-hooks"
+import {
+  GET_TASK,
+  UPDATE_TASK_DESCRIPTION,
+  COMPLETE_TASK
+} from "@/graphql/task"
+import Button from "@/components/button/button"
 import Showdown from "showdown"
 import ReactMde from "react-mde"
 import "react-mde/lib/styles/css/react-mde-all.css"
+import "./task.css"
 
 const container = css`
   height: 100vh;
@@ -24,6 +30,10 @@ const content = css`
   flex-flow: column;
 `
 
+const button = css`
+  margin-left: 1rem;
+`
+
 const converter = new Showdown.Converter({
   tables: true,
   simplifiedAutoLink: true,
@@ -32,9 +42,11 @@ const converter = new Showdown.Converter({
 })
 
 const Task = ({ taskId }) => {
-  const [val, setVal] = useState("")
-  const [tab, setTab] = useState("preview")
+  const [description, setDescription] = useState("")
+  const [tab, setTab] = useState("write")
   const [isEditing, setIsEditing] = useState(false)
+
+  // QUERY
   const {
     loading,
     data: { task = {} }
@@ -42,7 +54,37 @@ const Task = ({ taskId }) => {
     variables: { id: Number(taskId) }
   })
 
+  // MUTATION
+  const updateTaskDescription = useMutation(UPDATE_TASK_DESCRIPTION)
+  const completeTask = useMutation(COMPLETE_TASK)
+
+  // RESET
+  useEffect(() => {
+    setDescription("")
+    setIsEditing(false)
+    setTab("write")
+  }, [taskId])
+
   const isOwner = useIsOwner(task.project)
+
+  const handleClick = () => {
+    if (isEditing) {
+      updateTaskDescription({
+        variables: {
+          taskId: Number(taskId),
+          description
+        }
+      })
+    } else {
+      setDescription(task.description)
+    }
+
+    setIsEditing(!isEditing)
+  }
+
+  const handleCompleteTask = () => {
+    completeTask({ variables: { taskId: Number(taskId) } })
+  }
 
   if (task) {
     return (
@@ -52,26 +94,47 @@ const Task = ({ taskId }) => {
             "Loading"
           ) : (
             <Fragment>
-              <button onClick={() => setIsEditing(!isEditing)}>
-                {isEditing ? "Save" : "Edit"}
-              </button>
-              <h1>{task.title}</h1>
-              <ReactMde
-                css={{ height: "auto", flex: 1 }}
-                readOnly={!isOwner || !isEditing}
-                onChange={val => setVal(val)}
-                value={val}
-                selectedTab={tab}
-                onTabChange={tab => setTab(tab)}
-                generateMarkdownPreview={markdown =>
-                  Promise.resolve(converter.makeHtml(markdown))
-                }
-                textAreaProps={{
-                  style: {
-                    height: "100%"
+              <div css={{ display: "flex", alignItems: "center" }}>
+                <h1>{task.title}</h1>
+
+                {isOwner && (
+                  <Button onClick={handleClick} cssProps={button}>
+                    {isEditing ? "Save" : "Edit"}
+                  </Button>
+                )}
+
+                {!isOwner && !task.completed && (
+                  <Button onClick={handleCompleteTask} cssProps={button}>
+                    Mark As Complete
+                  </Button>
+                )}
+              </div>
+
+              {isEditing ? (
+                <ReactMde
+                  css={{ height: "auto", flex: 1 }}
+                  readOnly={!isOwner || !isEditing}
+                  onChange={val => setDescription(val)}
+                  value={description}
+                  selectedTab={tab}
+                  onTabChange={tab => setTab(tab)}
+                  generateMarkdownPreview={markdown =>
+                    Promise.resolve(converter.makeHtml(markdown))
                   }
-                }}
-              />
+                  textAreaProps={{
+                    style: {
+                      height: "100%"
+                    }
+                  }}
+                />
+              ) : (
+                <div
+                  id="task-description"
+                  dangerouslySetInnerHTML={{
+                    __html: converter.makeHtml(task.description)
+                  }}
+                />
+              )}
             </Fragment>
           )}
         </div>
