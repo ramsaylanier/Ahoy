@@ -4,7 +4,7 @@ import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import { Link } from "@reach/router"
 import { useStore } from "@/state/store"
-import theme, { lightenPrimary } from "@/theme"
+import theme from "@/theme"
 
 import Tooltip from "@reach/tooltip"
 
@@ -24,22 +24,14 @@ const link = css`
   text-align: center;
   text-decoration: none;
   color: ${theme.colors.primary};
-  &:hover {
-    background: ${lightenPrimary(1.3)};
-  }
 `
 
 const linkActive = css`
   position: relative;
-  background: ${theme.colors.primary};
 
   > span {
     background: white;
     color: ${theme.colors.primary};
-  }
-
-  &:hover {
-    background: ${theme.colors.primary};
   }
 `
 

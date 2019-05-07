@@ -42,3 +42,12 @@ export const CREATE_PROJECT = gql`
     }
   }
 `
+
+export const UPDATE_PROJECT_TITLE = gql`
+  mutation UpdateProjectTitle($projectId: Int!, $title: String!) {
+    updateProjectTitle(projectId: $projectId, title: $title) {
+      id
+      title
+    }
+  }
+`

@@ -17,9 +17,7 @@ import "react-mde/lib/styles/css/react-mde-all.css"
 import "./task.css"
 
 const container = css`
-  height: 100vh;
   width: 100%;
-  overflow: auto;
 `
 
 const content = css`
@@ -146,7 +144,7 @@ const Task = ({ taskId }) => {
 }
 
 Task.propTypes = {
-  taskId: PropTypes.string.isRequired
+  taskId: PropTypes.string
 }
 
 export default Task

@@ -1,23 +1,22 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core"
+import PropTypes from "prop-types"
 import { Link } from "@reach/router"
 import { useStore } from "@/state/store"
 import theme, { darkBlue } from "@/theme"
 
+import ProjectList from "@/components/project/projectList"
+
 const header = css`
   grid-area: header;
   position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
   padding: 0.5rem;
-  background: ${theme.colors.primary};
+  background: ${darkBlue};
   display: flex;
   flex-flow: column;
   justify-content: space-between;
   align-items: center;
   border-right: 2px solid ${darkBlue};
-  z-index: ${theme.zIndex.appHeader};
 `
 
 const title = css`
@@ -42,17 +41,21 @@ const avatar = css`
   }
 `
 
-const AppHeader = () => {
+const AppHeader = ({ user }) => {
   const authState = useStore("auth")
   const isAuthenticated = new Date().getTime() < authState.expiresAt
 
   return (
     <header css={header}>
-      <h1 css={title}>
-        <Link css={link} to={isAuthenticated ? "/" : "/"}>
-          Ahoy
-        </Link>
-      </h1>
+      <div>
+        <h1 css={title}>
+          <Link css={link} to={isAuthenticated ? "/" : "/"}>
+            Ahoy
+          </Link>
+        </h1>
+
+        {user.projects && <ProjectList projects={user.projects} />}
+      </div>
 
       {isAuthenticated && (
         <Link to="/profile" css={avatar}>
@@ -61,6 +64,10 @@ const AppHeader = () => {
       )}
     </header>
   )
+}
+
+AppHeader.propTypes = {
+  user: PropTypes.object
 }
 
 export default AppHeader

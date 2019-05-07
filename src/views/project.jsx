@@ -14,6 +14,7 @@ import ContentWrapper from "@/components/contentWrapper"
 import CreateTaskButton from "@/components/button/createTaskButton"
 import TaskList from "@/components/task/taskList"
 import UserList from "@/components/user/userList"
+import ProjectTitle from "@/components/project/projectTitle"
 
 import DeleteIcon from "@/icons/deleteIcon"
 
@@ -21,10 +22,27 @@ import { PROJECT_QUERY } from "@/graphql/project"
 import { DELETE_TASKS } from "@/graphql/task"
 import theme from "@/theme"
 import DragDropContext from "@/components/dragDropContext"
+import MembersIcon from "@/components/icons/members"
+
+const wrapper = css`
+  min-height: 100vh;
+  background: white;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header"
+    "body";
+`
+
+const header = css`
+  grid-area: header;
+  padding: 1rem;
+  border-bottom: 1px solid ${theme.colors.primary};
+`
 
 const body = css`
+  grid-area: body;
   display: flex;
-  height: 100vh;
 `
 
 const addButton = css`
@@ -114,10 +132,15 @@ const Project = ({ projectId, children }) => {
   const hasSelection = state.selection.length > 0
 
   return (
-    <ContentWrapper size="full" cssProps={{ background: "white" }}>
+    <ContentWrapper size="full" cssProps={wrapper}>
+      {project && (
+        <div css={header}>
+          <ProjectTitle project={project} isOwner={isOwner} />
+        </div>
+      )}
       <div css={body}>
         {isOwner && (
-          <Column title="Members">
+          <Column title="Members" icon={MembersIcon}>
             <ColumnToolbar>
               <InviteUserButton projectId={id} />
             </ColumnToolbar>
