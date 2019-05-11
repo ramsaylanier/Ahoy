@@ -2,7 +2,7 @@
 import { Fragment } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
-import { useQuery, useMutation } from "react-apollo-hooks"
+import { useQuery, useMutation, useSubscription } from "react-apollo-hooks"
 import { useImmerReducer } from "use-immer"
 import useIsOwner from "@/hooks/useIsOwner"
 
@@ -18,7 +18,10 @@ import ProjectTitle from "@/components/project/projectTitle"
 
 import DeleteIcon from "@/icons/deleteIcon"
 
-import { PROJECT_QUERY } from "@/graphql/project"
+import {
+  PROJECT_QUERY,
+  PROJECT_TITLE_UPDATED_SUBSCRIPTION
+} from "@/graphql/project"
 import { DELETE_TASKS } from "@/graphql/task"
 import theme from "@/theme"
 import DragDropContext from "@/components/dragDropContext"
@@ -91,8 +94,9 @@ const Project = ({ projectId, children }) => {
     clearSelection: () => dispatch({ type: "clearSelection" })
   }
 
-  // Queries
   const id = Number(projectId)
+
+  // Queries
   const { data = {}, loading } = useQuery(PROJECT_QUERY, {
     variables: { id }
   })
@@ -100,6 +104,9 @@ const Project = ({ projectId, children }) => {
   // Mutations
   const deleteTasks = useMutation(DELETE_TASKS)
   const isOwner = useIsOwner(data.project)
+
+  // Subscriptions
+  useSubscription(PROJECT_TITLE_UPDATED_SUBSCRIPTION)
 
   if (loading) return "Loading..."
 

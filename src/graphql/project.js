@@ -51,3 +51,12 @@ export const UPDATE_PROJECT_TITLE = gql`
     }
   }
 `
+
+export const PROJECT_TITLE_UPDATED_SUBSCRIPTION = gql`
+  subscription onProjectTitleUpdated {
+    projectTitleUpdated {
+      id
+      title
+    }
+  }
+`
