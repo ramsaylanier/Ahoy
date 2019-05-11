@@ -40,6 +40,7 @@ const CreateProjectButton = ({ cssProps }) => {
   return (
     <Fragment>
       <IconButton
+        tooltip="Create Project"
         cssProps={[addButton, cssProps]}
         onClick={() => handleClick()}
       >

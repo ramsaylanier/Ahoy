@@ -2,12 +2,13 @@
 import React, { useImperativeHandle, useRef, useEffect } from "react"
 import { DragSource, DropTarget } from "react-dnd"
 import { jsx, css } from "@emotion/core"
-import theme, { lightenPrimary } from "@/theme"
+import theme, { darken, lightenPrimary } from "@/theme"
 import Color from "color"
 import { useMutation } from "react-apollo-hooks"
 import { UPDATE_TASK_ORDER } from "@/graphql/task"
 import useIsOwner from "@/hooks/useIsOwner"
-
+import CheckboxMarkedIcon from "@/components/icons/checkboxMarked"
+import CheckboxIcon from "@/components/icons/checkbox"
 import { Link } from "@reach/router"
 
 const listItem = css`
@@ -18,7 +19,6 @@ const listItem = css`
     .string()};
   a {
     text-overflow: ellipsis;
-    display: block;
     color: ${theme.colors.primary};
     padding: 1rem;
   }
@@ -26,14 +26,22 @@ const listItem = css`
 
 const link = css`
   width: 100%;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 1.5rem 0.5rem;
   font-size: 1rem;
   text-decoration: none;
   color: ${theme.colors.primary};
   &:hover {
-    background: ${lightenPrimary(1.3)};
+    background: ${lightenPrimary(1.2)};
   }
+`
+
+const icon = css`
+  height: 24px;
+  width: 24px;
+  margin-left: 1rem;
 `
 
 const TaskListItem = React.forwardRef(
@@ -75,6 +83,14 @@ const TaskListItem = React.forwardRef(
         )}
         <Link css={link} to={`task/${task.id}`}>
           {task.title}
+          {!isOwner &&
+            (task.completed ? (
+              <CheckboxMarkedIcon
+                css={[icon, { fill: darken(theme.colors.success)(0.2) }]}
+              />
+            ) : (
+              <CheckboxIcon css={[icon, { fill: theme.colors.primary }]} />
+            ))}
         </Link>
       </div>
     )

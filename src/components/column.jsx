@@ -28,7 +28,7 @@ const header = css`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0.5rem 0 0.5rem 0.5rem;
+  padding: 0.5rem;
   background: ${lightenPrimary(1.3)};
 `
 
@@ -63,6 +63,7 @@ const Column = ({
   min = 100,
   children,
   title,
+  icon,
   expandable = true
 }) => {
   const [open, setOpen] = useState(false)
@@ -83,7 +84,12 @@ const Column = ({
       >
         <div css={header}>
           <button onClick={handleExpand} css={toggle}>
-            {title && <h3 css={text}>{title}</h3>}
+            {title && (
+              <h3 css={text}>
+                {icon && icon}
+                {title}
+              </h3>
+            )}
             {open ? <ExpandLeftIcon /> : <ExpandRightIcon />}
           </button>
         </div>
@@ -93,12 +99,7 @@ const Column = ({
   }
 
   return (
-    <div
-      css={[list, { maxWidth: max }]}
-      pose={open ? "open" : "close"}
-      max={max}
-      min={min}
-    >
+    <div css={[list, { maxWidth: max }]} max={max} min={min}>
       <div css={header}>
         {title && <h3 css={[text, { padding: "4px 0" }]}>{title}</h3>}
       </div>
@@ -112,7 +113,8 @@ Column.propTypes = {
   max: PropTypes.oneOfType(["string", "number"]),
   min: PropTypes.oneOfType(["string", "number"]),
   title: PropTypes.string,
-  expandable: PropTypes.boolean
+  icon: PropTypes.node,
+  expandable: PropTypes.bool
 }
 
 export default Column

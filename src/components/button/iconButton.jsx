@@ -2,9 +2,11 @@
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import theme from "@/theme"
+import Tooltip from "@reach/tooltip"
 
 const base = css`
   appearance: none;
+  position: relative;
   border: 0;
   height: 26px;
   width: 26px;
@@ -42,12 +44,14 @@ const colorMap = {
   secondary
 }
 
-const IconButton = ({ onClick, children, color, cssProps }) => {
+const IconButton = ({ onClick, children, color, cssProps, tooltip = "" }) => {
   const type = colorMap[color] || dflt
   return (
-    <button onClick={onClick} css={[type, cssProps]}>
-      {children}
-    </button>
+    <Tooltip label={tooltip}>
+      <button onClick={onClick} css={[type, cssProps]}>
+        {children}
+      </button>
+    </Tooltip>
   )
 }
 
@@ -55,6 +59,7 @@ IconButton.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func,
   color: PropTypes.string,
+  tooltip: PropTypes.string,
   cssProps: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 }
 

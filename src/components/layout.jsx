@@ -6,7 +6,6 @@ import Color from "color"
 import { redirectTo } from "@reach/router"
 
 import AppNav from "@/components/appNav"
-import ProjectList from "@/components/project/projectList"
 
 import { useQuery } from "react-apollo-hooks"
 import { USER_QUERY } from "@/graphql/user"
@@ -43,13 +42,10 @@ const Layout = props => {
     redirectTo("/login")
   }
 
-  const { user } = data
-
   return (
     <div css={container}>
-      <AppNav />
+      <AppNav user={data.user} />
       <main css={main}>
-        {user.projects && <ProjectList projects={data.user.projects} />}
         <div css={content}>{props.children}</div>
       </main>
     </div>

@@ -3,6 +3,7 @@ import gql from "graphql-tag"
 export const USER_QUERY = gql`
   query UserQuery($id: String) {
     user(id: $id) {
+      id
       projects {
         id
         title

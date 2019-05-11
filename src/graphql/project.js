@@ -9,6 +9,8 @@ export const PROJECT_QUERY = gql`
         id
         title
         order
+        completed
+        completed_at
         project {
           owner {
             id
@@ -37,6 +39,24 @@ export const CREATE_PROJECT = gql`
         id
       }
       created_at
+    }
+  }
+`
+
+export const UPDATE_PROJECT_TITLE = gql`
+  mutation UpdateProjectTitle($projectId: Int!, $title: String!) {
+    updateProjectTitle(projectId: $projectId, title: $title) {
+      id
+      title
+    }
+  }
+`
+
+export const PROJECT_TITLE_UPDATED_SUBSCRIPTION = gql`
+  subscription onProjectTitleUpdated {
+    projectTitleUpdated {
+      id
+      title
     }
   }
 `
