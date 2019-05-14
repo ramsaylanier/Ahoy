@@ -1,16 +1,67 @@
 /** @jsx jsx */
 import { Fragment, useState, useEffect } from "react"
-import { jsx } from "@emotion/core"
+import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
+import theme from "@/theme"
+import {
+  useStore as useProjectStore,
+  useDispatch as useProjectDispatch,
+  actions as projectActions
+} from "@/components/project/projectState"
 
+import CreateTaskButton from "@/components/button/createTaskButton"
+import IconButton from "@/components/button/iconButton"
 import TaskListItem from "./taskListItem"
 
-const TaskList = ({ tasks, actions, state, dispatch }) => {
-  const [sortedTasks, setSortedTasks] = useState(tasks)
+import DeleteIcon from "@/icons/deleteIcon"
 
+import { DELETE_TASKS } from "@/graphql/task"
+import { PROJECT_QUERY } from "@/graphql/project"
+import { useMutation } from "react-apollo-hooks"
+
+const addButton = css`
+  margin-left: 0.5rem;
+  background: white;
+  path {
+    fill: ${theme.colors.primary};
+  }
+`
+
+const TaskList = ({ project }) => {
   useEffect(() => {
-    setSortedTasks(tasks)
-  }, [tasks])
+    setSortedTasks(project.tasks)
+  }, [project.tasks])
+  const state = useProjectStore()
+  const projectDispatch = useProjectDispatch()
+  const [sortedTasks, setSortedTasks] = useState(project.tasks || [])
+  const deleteTasks = useMutation(DELETE_TASKS)
+  const actions = projectActions(projectDispatch)
+
+  if (!project) return null
+  const id = Number(project.id)
+  const handleDeleteClick = () => {
+    deleteTasks({
+      variables: { ids: state.selection },
+      update: (store, { data: { deleteTasks } }) => {
+        const { project } = store.readQuery({
+          query: PROJECT_QUERY,
+          variables: { id }
+        })
+
+        project.tasks = project.tasks.filter(
+          task => !deleteTasks.includes(task.id)
+        )
+
+        store.writeQuery({
+          query: PROJECT_QUERY,
+          variables: { id },
+          data: { project }
+        })
+
+        actions.clearSelection()
+      }
+    })
+  }
 
   const moveTask = (dragIndex, hoverIndex) => {
     const tasks = [...sortedTasks]
@@ -24,8 +75,22 @@ const TaskList = ({ tasks, actions, state, dispatch }) => {
     setSortedTasks(tasks)
   }
 
+  const hasSelection = state.selection.length > 0
+
   return (
     <Fragment>
+      {hasSelection ? (
+        <Fragment>
+          <span css={{ fontSize: "0.8rem", color: "white" }}>
+            {state.selection.length} selected
+          </span>
+          <IconButton cssProps={addButton} onClick={() => handleDeleteClick()}>
+            <DeleteIcon />
+          </IconButton>
+        </Fragment>
+      ) : (
+        <CreateTaskButton projectId={id} />
+      )}
       {sortedTasks.map((task, index) => {
         return (
           <TaskListItem
@@ -34,8 +99,6 @@ const TaskList = ({ tasks, actions, state, dispatch }) => {
             moveTask={moveTask}
             index={index}
             actions={actions}
-            state={state}
-            dispatch={dispatch}
           />
         )
       })}
@@ -44,10 +107,10 @@ const TaskList = ({ tasks, actions, state, dispatch }) => {
 }
 
 TaskList.propTypes = {
-  tasks: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired,
-  state: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  project: PropTypes.object,
+  actions: PropTypes.object,
+  state: PropTypes.object,
+  dispatch: PropTypes.func
 }
 
 export default TaskList

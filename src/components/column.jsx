@@ -82,17 +82,19 @@ const Column = ({
         max={max}
         min={min}
       >
-        <div css={header}>
-          <button onClick={handleExpand} css={toggle}>
-            {title && (
-              <h3 css={text}>
-                {icon && icon}
-                {title}
-              </h3>
-            )}
-            {open ? <ExpandLeftIcon /> : <ExpandRightIcon />}
-          </button>
-        </div>
+        {title && (
+          <div css={header}>
+            <button onClick={handleExpand} css={toggle}>
+              {title && (
+                <h3 css={text}>
+                  {icon && icon}
+                  {title}
+                </h3>
+              )}
+              {open ? <ExpandLeftIcon /> : <ExpandRightIcon />}
+            </button>
+          </div>
+        )}
         {childrenWithProps}
       </PosedColumn>
     )
@@ -100,9 +102,11 @@ const Column = ({
 
   return (
     <div css={[list, { maxWidth: max }]} max={max} min={min}>
-      <div css={header}>
-        {title && <h3 css={[text, { padding: "4px 0" }]}>{title}</h3>}
-      </div>
+      {title && (
+        <div css={header}>
+          {title && <h3 css={[text, { padding: "4px 0" }]}>{title}</h3>}
+        </div>
+      )}
       {children}
     </div>
   )

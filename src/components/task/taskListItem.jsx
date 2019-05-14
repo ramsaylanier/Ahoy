@@ -81,7 +81,7 @@ const TaskListItem = React.forwardRef(
             }}
           />
         )}
-        <Link css={link} to={`task/${task.id}`}>
+        <Link css={link} to={`./${task.id}`}>
           {task.title}
           {!isOwner &&
             (task.completed ? (

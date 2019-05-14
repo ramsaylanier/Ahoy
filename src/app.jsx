@@ -42,8 +42,8 @@ const App = () => {
           <Home path="/" />
           <Profile path="profile" />
           <Project path="projects/:projectId">
-            <Member path="member/:memberId" />
-            <Task path="task/:taskId" />
+            <Task path="tasks/:taskId" />
+            <Member path="members/:memberId" />
           </Project>
           <Verify path="verify" />
         </Layout>
