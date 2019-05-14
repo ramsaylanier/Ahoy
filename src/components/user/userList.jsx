@@ -38,14 +38,17 @@ const badge = css`
   color: ${theme.colors.primary};
 `
 
-const UserList = ({ users, projectOwner }) => {
+const UserList = ({ project }) => {
+  if (!project) return null
+
+  const users = [project.owner, ...project.members]
   return (
     <ul css={list}>
       {users.map(user => {
-        const isOwner = user.id === projectOwner.id
+        const isOwner = user.id === project.owner.id
         return (
           <li key={user.id} css={listItem}>
-            <Link to={`member/${user.id}`}>{user.nickname}</Link>
+            <Link to={`members/${user.id}`}>{user.nickname}</Link>
             {isOwner && <span css={badge}>owner</span>}
           </li>
         )
@@ -55,8 +58,7 @@ const UserList = ({ users, projectOwner }) => {
 }
 
 UserList.propTypes = {
-  projectOwner: PropTypes.object.isRequired,
-  users: PropTypes.array.isRequired
+  project: PropTypes.object
 }
 
 export default UserList

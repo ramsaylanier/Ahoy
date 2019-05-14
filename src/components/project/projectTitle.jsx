@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { jsx, css } from "@emotion/core"
 import PropTypes from "prop-types"
 import theme, { darken } from "@/theme"
@@ -36,6 +36,11 @@ const flex = css`
 const ProjectTitle = ({ project, isOwner }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [val, setVal] = useState(project.title)
+
+  // reset val to project title when project changes
+  useEffect(() => {
+    setVal(project.title)
+  }, [project.id, project.title])
 
   const updateProjectTitle = useMutation(UPDATE_PROJECT_TITLE)
 

@@ -74,7 +74,7 @@ const ProjectListItem = ({ project, expanded }) => {
     <div css={[listItem, expanded && listItemExpanded]}>
       <Tooltip label={project.title}>
         <Link
-          to={`/projects/${project.id}`}
+          to={`/projects/${project.id}/tasks`}
           css={[link, isCurrent && linkActive]}
           getProps={setActive}
         >
